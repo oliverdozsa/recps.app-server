@@ -18,6 +18,6 @@ public class GreetingResource {
     @Produces(MediaType.TEXT_PLAIN)
     @Authenticated
     public Uni<String> hello() {
-        return Uni.createFrom().item("Hello " + userInfo.getName() + " from Quarkus REST");
+        return Uni.createFrom().item("Hello " + userInfo.getEmail() + " from Quarkus REST");
     }
 }
