@@ -131,7 +131,7 @@ INSERT INTO recipe (id, name, cooking_time, num_of_ingredients, source_page_id) 
 INSERT INTO recipe (id, name, cooking_time, num_of_ingredients, source_page_id) VALUES (2, 'Tomato & Onion Salad',   0, 3, 1);
 INSERT INTO recipe (id, name, cooking_time, num_of_ingredients, source_page_id) VALUES (3, 'Fokhagymás csirkemell',  2, 3, 2);
 INSERT INTO recipe (id, name, cooking_time, num_of_ingredients, source_page_id) VALUES (4, 'Custard',                1, 3, 1);
-INSERT INTO recipe (id, name, cooking_time, num_of_ingredients, source_page_id) VALUES (5,  'Onion with beans',       0, 2, 1);
+INSERT INTO recipe (id, name, cooking_time, num_of_ingredients, source_page_id) VALUES (5, 'Onion with beans',       0, 2, 1);
 -- EN - AllRecipes
 INSERT INTO recipe (id, name, cooking_time, num_of_ingredients, source_page_id) VALUES (6,  'Tomato Soup',            1, 4, 3);
 INSERT INTO recipe (id, name, cooking_time, num_of_ingredients, source_page_id) VALUES (7,  'Pancakes',               0, 4, 3);
