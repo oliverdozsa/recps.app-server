@@ -1,8 +1,6 @@
 package app.recps;
 
-import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.oidc.server.OidcWiremockTestResource;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
