@@ -238,9 +238,9 @@ INSERT INTO recipe_ingredient (id, ingredient_id, recipe_id) VALUES (56, 17, 16)
 
 
 SELECT setval('language_id_seq', (SELECT MAX(id) FROM ingredient));
-SELECT setval('source_page_id_seq', (SELECT MAX(id) FROM ingredient));
+SELECT setval('source_page_id_seq', (SELECT MAX(id) FROM source_page));
 SELECT setval('ingredient_id_seq', (SELECT MAX(id) FROM ingredient));
 SELECT setval('ingredient_name_id_seq', (SELECT MAX(id) FROM ingredient_name));
-SELECT setval('ingredient_alternative_name_id_seq', (SELECT MAX(id) FROM ingredient_name));
-SELECT setval('recipe_id_seq', (SELECT MAX(id) FROM ingredient_name));
-SELECT setval('recipe_ingredient_id_seq', (SELECT MAX(id) FROM ingredient_name));
+SELECT setval('ingredient_alternative_name_id_seq', (SELECT MAX(id) FROM ingredient_alternative_name));
+SELECT setval('recipe_id_seq', (SELECT MAX(id) FROM recipe));
+SELECT setval('recipe_ingredient_id_seq', (SELECT MAX(id) FROM recipe_ingredient));

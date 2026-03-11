@@ -36,7 +36,7 @@ class RecipesSearchSqlBuilder {
                 .map(c -> "r.id IN (" + subQueryForIngredientsGroup(c.group()) + ") " + c.relation() + " ")
                 .collect(Collectors.joining());
 
-        // no relation for last condition
+        // relation is ignored for last condition
         var lastCondition = includedIngredientsConditions.get(conditionsSize - 1);
         var lastConditionJpql = "r.id in (" + subQueryForIngredientsGroup(lastCondition.group()) + ")";
 
@@ -50,6 +50,6 @@ class RecipesSearchSqlBuilder {
         return "SELECT ri.recipe_id FROM recipe_ingredient ri " +
                 "WHERE ri.ingredient_id in (" + ingredientIds + ") " +
                 "GROUP BY ri.recipe_id " +
-                "HAVING COUNT(ri.ingredient_id) > " + ingredientGroup.minMatch();
+                "HAVING COUNT(ri.ingredient_id) >= " + ingredientGroup.minMatch();
     }
 }
