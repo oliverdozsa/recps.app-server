@@ -1,11 +1,10 @@
 package app.recps.data.entities;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "language")
-public class LanguageEntity extends PanacheEntityBase {
+public class LanguageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

@@ -15,6 +15,8 @@ public class RecpsAppTestBase {
     @OidcWireMock
     WireMockServer wireMockServer;
 
+    public RestTestBase rest = new RestTestBase();
+
     public String loginAs(String user) {
         var jwt = OidcWiremockTestResource.getIdToken(user, Collections.emptySet(), "quarkus-service-app");
         mockUserInfoResponse(user, jwt);
