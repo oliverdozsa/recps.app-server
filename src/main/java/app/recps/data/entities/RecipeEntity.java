@@ -32,11 +32,11 @@ public class RecipeEntity {
     public String imageUrl;
 
     @OneToMany(mappedBy = "recipe", fetch = FetchType.EAGER)
-    private List<RecipeIngredientEntity> ingredients;
+    public List<RecipeIngredientEntity> ingredients;
 
     @ManyToOne
     @JoinColumn(name = "source_page_id")
-    private SourcePageEntity sourcePage;
+    public SourcePageEntity sourcePage;
 
     public enum Time {
         QUICK, AVERAGE, LENGTHY, UNKNOWN
