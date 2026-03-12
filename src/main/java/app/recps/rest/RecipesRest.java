@@ -6,8 +6,10 @@ import app.recps.rest.mappings.RecipeEntityToSearchResponse;
 import app.recps.rest.requests.RecipeSearchRequest;
 import app.recps.rest.responses.PageResponse;
 import app.recps.rest.responses.RecipeSearchResponse;
+import io.quarkus.logging.Log;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -25,7 +27,9 @@ public class RecipesRest {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<PageResponse<RecipeSearchResponse>> searchBy(RecipeSearchRequest query) {
+    public Uni<PageResponse<RecipeSearchResponse>> searchBy(@Valid RecipeSearchRequest query) {
+        Log.info("Got request to search for recipes.");
+        Log.debugf("query = %s", query);
         return repository.searchBy(query)
                 .map(RecipesRest::toResponse);
     }

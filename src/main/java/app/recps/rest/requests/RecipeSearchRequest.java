@@ -1,13 +1,26 @@
 package app.recps.rest.requests;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+
 import java.util.List;
 
-public record RecipeSearchRequest(List<IngredientGroupWithRelation> includedIngredientGroups) {
+public class RecipeSearchRequest {
+    public List<@Valid IngredientGroupWithRelation> includedIngredientGroups;
+
+    @Valid
+    public IngredientGroup excludedIngredients;
+
+    @Override
+    public String toString() {
+        return "RecipeSearchRequest{includedIngredientGroups=" + includedIngredientGroups + "}";
+    }
 
     public record IngredientGroupWithRelation(IngredientGroup group, IngredientGroupRelation relation) {
     }
 
-    public record IngredientGroup(List<Long> ids, Integer minMatch) {
+    public record IngredientGroup(@NotEmpty List<Long> ids, @Min(1) Integer minMatch) {
         public static IngredientGroup of(Integer minMatch, Long ...id) {
             return new IngredientGroup(List.of(id), minMatch);
         }
