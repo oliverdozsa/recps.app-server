@@ -1,4 +1,4 @@
-package app.recps;
+package app.recps.testbases;
 
 import app.recps.rest.requests.RecipeSearchRequest;
 import app.recps.rest.responses.PageResponse;

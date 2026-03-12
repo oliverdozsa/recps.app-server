@@ -1,6 +1,6 @@
 package app.recps.rest;
 
-import app.recps.RecpsAppTestBase;
+import app.recps.testbases.RecpsAppTestBase;
 import app.recps.rest.requests.RecipeSearchRequest;
 import app.recps.rest.requests.RecipeSearchRequest.IngredientGroup;
 import app.recps.rest.requests.RecipeSearchRequest.IngredientGroupWithRelation;
@@ -24,9 +24,10 @@ public class RecipeSearchByIngredientsTest extends RecpsAppTestBase {
         var byQuery = new RecipeSearchRequest(List.of(groupWithRelation));
         var response = rest.recipes.search(byQuery);
 
-        assertThat(response.items(), hasSize(2));
+        assertThat(response.items(), hasSize(8));
 
         var recipeNames = response.items().stream().map(RecipeSearchResponse::name).toList();
-        assertThat(recipeNames, containsInAnyOrder(List.of("Garlic Chicken", "Fokhagymás csirkemell")));
+        assertThat(recipeNames, containsInAnyOrder("Garlic Chicken", "Fokhagymás csirkemell", "Tomato & Onion Salad",
+                "Tomato Soup", "Paradicsomleves", "Lecsó", "Rántott csirkemell", "Gombaleves"));
     }
 }
