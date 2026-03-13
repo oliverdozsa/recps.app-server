@@ -1,0 +1,39 @@
+package app.recps.data.repositories.sql;
+
+import app.recps.rest.requests.RecipeSearchRequest;
+import app.recps.rest.requests.RecipeSearchRequest.IngredientGroupWithRelation;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+class IncludedIngredientsSql {
+    public static String filterBy(List<IngredientGroupWithRelation> includedIngredientGroups) {
+        if (includedIngredientGroups == null || includedIngredientGroups.isEmpty()) {
+            return "";
+        }
+
+        var conditionsSize = includedIngredientGroups.size();
+
+        // r.id in (subquery_1) <AND / OR> r.id in (subquery_2) ...
+        var conditionsWithRelations = includedIngredientGroups.subList(0, conditionsSize - 1);
+        var conditionsWithRelationsSql = conditionsWithRelations.stream()
+                .map(c -> "r.id IN (" + subQueryFor(c.group()) + ") " + c.relation() + " ")
+                .collect(Collectors.joining());
+
+        // relation is ignored for last condition
+        var lastCondition = includedIngredientGroups.get(conditionsSize - 1);
+        var lastConditionSql = "r.id IN (" + subQueryFor(lastCondition.group()) + ") ";
+
+        return conditionsWithRelationsSql + lastConditionSql;
+    }
+
+    private static String subQueryFor(RecipeSearchRequest.IngredientGroup ingredientGroup) {
+        var ingredientIds = ingredientGroup.ids().stream().map(Object::toString)
+                .collect(Collectors.joining(","));
+
+        return "SELECT ri.recipe_id FROM recipe_ingredient ri " +
+                "WHERE ri.ingredient_id IN (" + ingredientIds + ") " +
+                "GROUP BY ri.recipe_id " +
+                "HAVING COUNT(ri.ingredient_id) >= " + ingredientGroup.minMatch();
+    }
+}

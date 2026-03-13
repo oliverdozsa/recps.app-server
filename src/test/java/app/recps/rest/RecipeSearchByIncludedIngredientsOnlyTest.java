@@ -1,6 +1,5 @@
 package app.recps.rest;
 
-import app.recps.rest.responses.PageResponse;
 import app.recps.testbases.RecpsAppTestBase;
 import app.recps.rest.requests.RecipeSearchRequest;
 import app.recps.rest.requests.RecipeSearchRequest.IngredientGroup;
@@ -8,7 +7,6 @@ import app.recps.rest.requests.RecipeSearchRequest.IngredientGroupWithRelation;
 import app.recps.rest.responses.RecipeSearchResponse;
 import io.quarkus.logging.Log;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Test;
@@ -133,12 +131,10 @@ public class RecipeSearchByIncludedIngredientsOnlyTest extends RecpsAppTestBase 
         assertThat(recipeNames, containsInAnyOrder(
                 "Tomato & Onion Salad", "Tomato Soup", "Paradicsomleves", "Lecsó", "Gombaleves",
                 "Pancakes", "Rántott csirkemell"));
-        Log.info("finished test");
     }
 
-    // TODO
-    // @Test
-    public void testIngredientGroupWithEmptyIngredients() {
+    @Test
+    public void ingredientGroupWithEmptyIngredients() {
         var emptyGroup = IngredientGroup.of(1);
         var groupWithRelation = new IngredientGroupWithRelation(emptyGroup, RecipeSearchRequest.IngredientGroupRelation.OR);
 
@@ -150,6 +146,25 @@ public class RecipeSearchByIncludedIngredientsOnlyTest extends RecpsAppTestBase 
                 .body(query)
                 .when().post("/recipes/search")
                 .then()
-                .statusCode(Response.Status.OK.getStatusCode());
+                .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
+    }
+
+    @Test
+    public void ingredientGroupWithInvalidMinMatch() {
+        var invalidMinMatchGroup = IngredientGroup.of(0, 1L, 2L, 3L);
+        var groupWithRelation = new IngredientGroupWithRelation(invalidMinMatchGroup, RecipeSearchRequest.IngredientGroupRelation.OR);
+
+        var query = new RecipeSearchRequest();
+        query.includedIngredientGroups = List.of(groupWithRelation);
+
+        var invalidMatchResponse = given()
+                .contentType(ContentType.JSON)
+                .body(query)
+                .when().post("/recipes/search")
+                .then()
+                .statusCode(Response.Status.BAD_REQUEST.getStatusCode())
+                .extract().body().asPrettyString();
+
+        System.out.println(invalidMatchResponse);
     }
 }

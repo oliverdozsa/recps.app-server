@@ -8,16 +8,14 @@ import java.util.List;
 
 public class RecipeSearchRequest {
     public List<@Valid IngredientGroupWithRelation> includedIngredientGroups;
-
-    @Valid
-    public IngredientGroup excludedIngredients;
+    public List<Long> excludedIngredients;
 
     @Override
     public String toString() {
         return "RecipeSearchRequest{includedIngredientGroups=" + includedIngredientGroups + "}";
     }
 
-    public record IngredientGroupWithRelation(IngredientGroup group, IngredientGroupRelation relation) {
+    public record IngredientGroupWithRelation(@Valid IngredientGroup group, IngredientGroupRelation relation) {
     }
 
     public record IngredientGroup(@NotEmpty List<Long> ids, @Min(1) Integer minMatch) {

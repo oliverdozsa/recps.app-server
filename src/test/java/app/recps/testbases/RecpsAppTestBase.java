@@ -7,10 +7,13 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.oidc.server.OidcWireMock;
 import io.quarkus.test.oidc.server.OidcWiremockTestResource;
 
+import org.junit.jupiter.api.extension.ExtendWith;
+
 import java.util.Collections;
 
 @QuarkusTest
 @QuarkusTestResource(OidcWiremockTestResource.class)
+@ExtendWith(TestLoggingExtension.class)
 public class RecpsAppTestBase {
     @OidcWireMock
     WireMockServer wireMockServer;
