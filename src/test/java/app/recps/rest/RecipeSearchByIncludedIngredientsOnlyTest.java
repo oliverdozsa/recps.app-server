@@ -15,8 +15,7 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 
 @QuarkusTest
 public class RecipeSearchByIncludedIngredientsOnlyTest extends RecpsAppTestBase {
@@ -141,12 +140,16 @@ public class RecipeSearchByIncludedIngredientsOnlyTest extends RecpsAppTestBase 
         var query = new RecipeSearchRequest();
         query.includedIngredientGroups = List.of(groupWithRelation);
 
-        given()
+        var invalidMatchResponse = given()
                 .contentType(ContentType.JSON)
                 .body(query)
                 .when().post("/recipes/search")
                 .then()
-                .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
+                .statusCode(Response.Status.BAD_REQUEST.getStatusCode())
+                .extract().body().asPrettyString();
+
+        assertThat(invalidMatchResponse, containsString("group.ids"));
+        assertThat(invalidMatchResponse, containsString("must not be empty"));
     }
 
     @Test
@@ -165,6 +168,7 @@ public class RecipeSearchByIncludedIngredientsOnlyTest extends RecpsAppTestBase 
                 .statusCode(Response.Status.BAD_REQUEST.getStatusCode())
                 .extract().body().asPrettyString();
 
-        System.out.println(invalidMatchResponse);
+        assertThat(invalidMatchResponse, containsString("minMatch"));
+        assertThat(invalidMatchResponse, containsString("must be greater than or equal to 1"));
     }
 }

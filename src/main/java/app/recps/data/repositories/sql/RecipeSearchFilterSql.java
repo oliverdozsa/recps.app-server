@@ -16,4 +16,12 @@ class RecipeSearchFilterSql {
     public String byExcludedIngredients() {
         return ExcludedIngredientsSql.filterBy(request.excludedIngredients);
     }
+
+    public String byName() {
+        if (request.filterByName == null || request.filterByName.isEmpty()) {
+            return "";
+        }
+
+        return "r.name ILIKE :filterByName";
+    }
 }
