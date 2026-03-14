@@ -11,12 +11,20 @@ public class RecipeSearchRequest {
     public List<Long> excludedIngredients;
     public String filterByName;
 
+    @Min(1)
+    public Integer limit = 25;
+
+    @Min(0)
+    public Long page = 0L;
+
     @Override
     public String toString() {
         return "{" +
                 "\"includedIngredientGroups\": " + includedIngredientGroups + ", " +
                 "\"excludedIngredients\": " + excludedIngredients + ", " +
-                "\"filterByName\": " + "\"" + filterByName + "\"" +
+                "\"filterByName\": " + "\"" + filterByName + "\"" + ", " +
+                "\"limit\": " + "\"" + limit + "\"" + ", " +
+                "\"page\": " + "\"" + page + "\"" +
                 "}";
     }
 

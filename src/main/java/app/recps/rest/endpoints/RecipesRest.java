@@ -1,4 +1,4 @@
-package app.recps.rest;
+package app.recps.rest.endpoints;
 
 import app.recps.data.entities.RecipeEntity;
 import app.recps.data.repositories.RecipeRepository;

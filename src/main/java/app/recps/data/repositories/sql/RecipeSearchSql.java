@@ -17,7 +17,9 @@ public class RecipeSearchSql {
         return "SELECT * from recipe r " + (isAnyFilterUsed() ? "WHERE " : "") +
                 filter.byIncludedIngredients() + ANDBeforeExcluded() +
                 filter.byExcludedIngredients() + ANDBeforeName() +
-                filter.byName();
+                filter.byName() +
+                " LIMIT " + request.limit + " " +
+                " OFFSET " + request.limit * request.page;
     }
 
     private boolean isAnyFilterUsed() {
