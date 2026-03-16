@@ -6,6 +6,6 @@ public record RecipeSearchResponse(Long id, String name, String url, String imag
     public record Ingredient(Long id, List<IngredientName> names) {
     }
 
-    public record IngredientName(String name, Long languageId) {
+    public record IngredientName(String name, String languageIso) {
     }
 }

@@ -29,7 +29,7 @@ public class RecipeEntityToSearchResponse {
                 entity.ingredient.id,
                 entity.ingredient.names == null ? List.of() :
                         entity.ingredient.names.stream()
-                                .map(n -> new RecipeSearchResponse.IngredientName(n.name, n.language.id))
+                                .map(n -> new RecipeSearchResponse.IngredientName(n.name, n.language.isoName))
                                 .toList()
         );
     }
