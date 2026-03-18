@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.*;
 @QuarkusTest
 public class RecipeSearchLimitAndOffsetTests extends RecpsAppTestBase {
     @Test
-    public void invalidLimit() {
+    public void limitIsTooLow() {
         var query = new RecipeSearchRequest();
         query.limit = -1;
 
@@ -28,6 +28,23 @@ public class RecipeSearchLimitAndOffsetTests extends RecpsAppTestBase {
 
         assertThat(response, containsString("searchBy.query.limit"));
         assertThat(response, containsString("must be greater than or equal to 1"));
+    }
+
+    @Test
+    public void limitIsTooBig() {
+        var query = new RecipeSearchRequest();
+        query.limit = 26;
+
+        var response = given()
+                .contentType(ContentType.JSON)
+                .body(query)
+                .when().post("/recipes/search")
+                .then()
+                .statusCode(Response.Status.BAD_REQUEST.getStatusCode())
+                .extract().body().asPrettyString();
+
+        assertThat(response, containsString("searchBy.query.limit"));
+        assertThat(response, containsString("must be less than or equal to 25"));
     }
 
     @Test

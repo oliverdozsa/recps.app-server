@@ -1,6 +1,7 @@
 package app.recps.rest.requests;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -12,7 +13,8 @@ public class RecipeSearchRequest {
     public String filterByName;
 
     @Min(1)
-    public Integer limit = 25;
+    @Max(25)
+    public Integer limit = 15;
 
     @Min(0)
     public Long page = 0L;
