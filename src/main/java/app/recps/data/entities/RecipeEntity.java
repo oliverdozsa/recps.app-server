@@ -17,18 +17,17 @@ public class RecipeEntity {
     public String name;
 
     @Lob
-    @Column(name = "url")
+    @Column(name = "url", columnDefinition = "text")
     public String url;
 
     @Column(name = "num_of_ingredients")
     public Integer numOfIngredients;
 
     @Column(name = "cooking_time")
-    @Enumerated(EnumType.ORDINAL)
-    public Time cookingTime;
+    public Integer cookingTime;
 
     @Lob
-    @Column(name = "image_url")
+    @Column(name = "image_url", columnDefinition = "text")
     public String imageUrl;
 
     @OneToMany(mappedBy = "recipe", fetch = FetchType.EAGER)
@@ -37,8 +36,4 @@ public class RecipeEntity {
     @ManyToOne
     @JoinColumn(name = "source_page_id")
     public SourcePageEntity sourcePage;
-
-    public enum Time {
-        QUICK, AVERAGE, LENGTHY, UNKNOWN
-    }
 }

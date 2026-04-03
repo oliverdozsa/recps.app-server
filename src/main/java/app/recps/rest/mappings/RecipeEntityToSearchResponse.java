@@ -19,7 +19,7 @@ public class RecipeEntityToSearchResponse {
                 entity.url,
                 entity.imageUrl,
                 ingredients,
-                entity.cookingTime != null ? entity.cookingTime.ordinal() : null,
+                entity.cookingTime != null ? entity.cookingTime : null,
                 entity.sourcePage != null ? entity.sourcePage.name : null
         );
     }
