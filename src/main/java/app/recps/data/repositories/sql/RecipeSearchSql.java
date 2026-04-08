@@ -5,21 +5,36 @@ import app.recps.rest.requests.RecipeSearchRequest;
 public class RecipeSearchSql {
     private RecipeSearchRequest request;
 
-    public static String from(RecipeSearchRequest request) {
+    public static String forSearch(RecipeSearchRequest request) {
         var instance = new RecipeSearchSql();
         instance.request = request;
 
         return instance.build();
     }
 
+    public static String forCount(RecipeSearchRequest request) {
+        var instance = new RecipeSearchSql();
+        instance.request = request;
+
+        return instance.buildForCount();
+    }
+
     private String build() {
+        return buildBase(false) +
+                " LIMIT " + request.limit +
+                " OFFSET " + request.limit * request.page;
+    }
+
+    private String buildForCount() {
+        return buildBase(true);
+    }
+
+    private String buildBase(boolean isForCount) {
         var filter = new RecipeSearchFilterSql(request);
-        return "SELECT * from recipe r " + (isAnyFilterUsed() ? "WHERE " : "") +
+        return "SELECT " + (isForCount ? "COUNT(" : "") + "*" + (isForCount ? ")" : "") + " from recipe r " + (isAnyFilterUsed() ? "WHERE " : "") +
                 filter.byIncludedIngredients() + ANDBeforeExcluded() +
                 filter.byExcludedIngredients() + ANDBeforeName() +
-                filter.byName() +
-                " LIMIT " + request.limit + " " +
-                " OFFSET " + request.limit * request.page;
+                filter.byName();
     }
 
     private boolean isAnyFilterUsed() {

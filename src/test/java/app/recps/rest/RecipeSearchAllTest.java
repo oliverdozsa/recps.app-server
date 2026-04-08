@@ -6,8 +6,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.*;
 
 @QuarkusTest
 public class RecipeSearchAllTest extends RecpsAppTestBase {
@@ -17,5 +16,6 @@ public class RecipeSearchAllTest extends RecpsAppTestBase {
         var response = rest.recipes.search(byQuery);
 
         assertThat(response.items(), hasSize(lessThan(25)));
+        assertThat(response.totalCount(), is(16L));
     }
 }

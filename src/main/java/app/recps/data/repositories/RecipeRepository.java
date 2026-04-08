@@ -20,8 +20,12 @@ public class RecipeRepository implements PanacheRepository<RecipeEntity> {
         return getSession().chain(s -> createQueryWithParametersSet(s, request).getResultList());
     }
 
+    public Uni<Long> countBy(RecipeSearchRequest request) {
+        return getSession().chain(s -> createCountQueryWithParametersSet(s, request).getSingleResult());
+    }
+
     private Mutiny.SelectionQuery<RecipeEntity> createQueryWithParametersSet(Mutiny.Session session, RecipeSearchRequest request) {
-        var sql = RecipeSearchSql.from(request);
+        var sql = RecipeSearchSql.forSearch(request);
         Log.debugf("sql = %s", sql);
 
         var query = session.createNativeQuery(sql, RecipeEntity.class);
@@ -30,7 +34,15 @@ public class RecipeRepository implements PanacheRepository<RecipeEntity> {
         return query;
     }
 
-    private void setParameterIfExists(Mutiny.SelectionQuery<RecipeEntity> query, String name, String value) {
+    private Mutiny.SelectionQuery<Long> createCountQueryWithParametersSet(Mutiny.Session session, RecipeSearchRequest request) {
+        var sql = RecipeSearchSql.forCount(request);
+        var query = session.createNativeQuery(sql, Long.class);
+        setParameterIfExists(query, "filterByName", request.filterByName);
+
+        return query;
+    }
+
+    private <T> void setParameterIfExists(Mutiny.SelectionQuery<T> query, String name, String value) {
         if(value != null && !value.isEmpty()) {
             query.setParameter(name, "%" + value + "%");
         }

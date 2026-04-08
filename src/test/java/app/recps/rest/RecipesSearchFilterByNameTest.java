@@ -7,8 +7,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 
 @QuarkusTest
 public class RecipesSearchFilterByNameTest extends RecpsAppTestBase {
@@ -21,6 +20,7 @@ public class RecipesSearchFilterByNameTest extends RecpsAppTestBase {
         var response = rest.recipes.search(byQuery);
 
         assertThat(response.items(), hasSize(4));
+        assertThat(response.totalCount(), is(4L));
 
         var recipeNames = response.items().stream().map(RecipeSearchResponse::name).toList();
         assertThat(recipeNames, containsInAnyOrder("Tomato & Onion Salad", "Tomato Soup",

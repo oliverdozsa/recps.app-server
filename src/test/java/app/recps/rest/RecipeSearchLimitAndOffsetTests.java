@@ -72,6 +72,7 @@ public class RecipeSearchLimitAndOffsetTests extends RecpsAppTestBase {
         var response = rest.recipes.search(byQuery);
 
         assertThat(response.items(), hasSize(3));
+        assertThat(response.totalCount(), is(16L));
     }
 
     @Test
@@ -84,5 +85,6 @@ public class RecipeSearchLimitAndOffsetTests extends RecpsAppTestBase {
         var response = rest.recipes.search(byQuery);
 
         assertThat(response.items(), hasSize(1));
+        assertThat(response.totalCount(), is(16L));
     }
 }

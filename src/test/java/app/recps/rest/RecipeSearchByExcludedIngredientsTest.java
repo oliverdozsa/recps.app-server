@@ -26,6 +26,7 @@ public class RecipeSearchByExcludedIngredientsTest extends RecpsAppTestBase {
         var response = rest.recipes.search(byQuery);
 
         assertThat(response.items(), hasSize(8));
+        assertThat(response.totalCount(), is(8L));
         var recipeNames = response.items().stream().map(RecipeSearchResponse::name).toList();
         assertThat(recipeNames, not(containsInAnyOrder("Garlic Chicken", "Tomato & Onion Salad", "Fokhagymás csirkemell",
                 "Tomato Soup", "Paradicsomleves", "Lecsó", "Rántott csirkemell", "Gombaleves")));
@@ -45,6 +46,7 @@ public class RecipeSearchByExcludedIngredientsTest extends RecpsAppTestBase {
         var response = rest.recipes.search(byQuery);
 
         assertThat(response.items(), hasSize(2));
+        assertThat(response.totalCount(), is(2L));
         var recipeNames = response.items().stream().map(RecipeSearchResponse::name).toList();
         assertThat(recipeNames, containsInAnyOrder("Garlic Chicken", "Fokhagymás csirkemell"));
     }
@@ -63,6 +65,7 @@ public class RecipeSearchByExcludedIngredientsTest extends RecpsAppTestBase {
         var response = rest.recipes.search(byQuery);
 
         assertThat(response.items(), hasSize(6));
+        assertThat(response.totalCount(), is(6L));
         var recipeNames = response.items().stream().map(RecipeSearchResponse::name).toList();
         assertThat(recipeNames, containsInAnyOrder(
                 "Tomato & Onion Salad", "Onion with beans", "Tomato Soup",
@@ -83,6 +86,7 @@ public class RecipeSearchByExcludedIngredientsTest extends RecpsAppTestBase {
         var response = rest.recipes.search(byQuery);
 
         assertThat(response.items(), hasSize(1));
+        assertThat(response.totalCount(), is(1L));
         var recipeNames = response.items().stream().map(RecipeSearchResponse::name).toList();
         assertThat(recipeNames, containsInAnyOrder("Tomato & Onion Salad"));
     }

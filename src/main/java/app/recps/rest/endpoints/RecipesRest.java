@@ -30,12 +30,13 @@ public class RecipesRest {
     public Uni<PageResponse<RecipeSearchResponse>> searchBy(@Valid RecipeSearchRequest query) {
         Log.info("Got request to search for recipes.");
         Log.debugf("query = %s", query);
-        return repository.searchBy(query)
-                .map(RecipesRest::toResponse);
+        return Uni.combine().all()
+                .unis(repository.searchBy(query), repository.countBy(query))
+                .with(RecipesRest::toResponse);
     }
 
-    private static PageResponse<RecipeSearchResponse> toResponse(List<RecipeEntity> recipeEntities) {
+    private static PageResponse<RecipeSearchResponse> toResponse(List<RecipeEntity> recipeEntities, Long totalCount) {
         var recipes = recipeEntities.stream().map(RecipeEntityToSearchResponse::from).toList();
-        return new PageResponse<>(recipes);
+        return new PageResponse<>(recipes, totalCount);
     }
 }
