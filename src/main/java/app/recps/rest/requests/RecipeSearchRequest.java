@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class RecipeSearchRequest {
         }
     }
 
-    public record IngredientGroup(@NotEmpty List<Long> ids, @Min(1) Integer minMatch) {
+    public record IngredientGroup(@NotEmpty List<Long> ids, @Min(1) @NotNull Integer minMatch) {
         public static IngredientGroup of(Integer minMatch, Long... id) {
             return new IngredientGroup(List.of(id), minMatch);
         }
