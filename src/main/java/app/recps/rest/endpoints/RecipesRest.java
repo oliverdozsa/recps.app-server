@@ -6,6 +6,7 @@ import app.recps.rest.mappings.RecipeEntityToSearchResponse;
 import app.recps.rest.requests.RecipeSearchRequest;
 import app.recps.rest.responses.PageResponse;
 import app.recps.rest.responses.RecipeSearchResponse;
+import io.quarkus.hibernate.reactive.panache.common.WithSession;
 import io.quarkus.logging.Log;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
@@ -27,6 +28,7 @@ public class RecipesRest {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @WithSession
     public Uni<PageResponse<RecipeSearchResponse>> searchBy(@Valid RecipeSearchRequest query) {
         Log.info("Got request to search for recipes.");
         Log.debugf("query = %s", query);

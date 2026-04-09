@@ -46,6 +46,5 @@ public class RecipeRepository implements PanacheRepository<RecipeEntity> {
         if(value != null && !value.isEmpty()) {
             query.setParameter(name, "%" + value + "%");
         }
-
     }
 }
