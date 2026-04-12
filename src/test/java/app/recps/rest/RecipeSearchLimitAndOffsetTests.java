@@ -16,6 +16,7 @@ public class RecipeSearchLimitAndOffsetTests extends RecpsAppTestBase {
     @Test
     public void limitIsTooLow() {
         var query = new RecipeSearchRequest();
+        query.ingredientLanguageId = 1L;
         query.limit = -1;
 
         var response = given()
@@ -33,6 +34,7 @@ public class RecipeSearchLimitAndOffsetTests extends RecpsAppTestBase {
     @Test
     public void limitIsTooBig() {
         var query = new RecipeSearchRequest();
+        query.ingredientLanguageId = 1L;
         query.limit = 26;
 
         var response = given()
@@ -50,6 +52,7 @@ public class RecipeSearchLimitAndOffsetTests extends RecpsAppTestBase {
     @Test
     public void invalidPage() {
         var query = new RecipeSearchRequest();
+        query.ingredientLanguageId = 1L;
         query.page = -1L;
 
         var response = given()
@@ -67,6 +70,7 @@ public class RecipeSearchLimitAndOffsetTests extends RecpsAppTestBase {
     @Test
     public void searchForAllRecipesWithLimit() {
         var byQuery = new RecipeSearchRequest();
+        byQuery.ingredientLanguageId = 1L;
         byQuery.limit = 3;
 
         var response = rest.recipes.search(byQuery);
@@ -78,6 +82,7 @@ public class RecipeSearchLimitAndOffsetTests extends RecpsAppTestBase {
     @Test
     public void searchForAllRecipesWithOffsetAndLimit() {
         var byQuery = new RecipeSearchRequest();
+        byQuery.ingredientLanguageId = 1L;
         // 16 recipes in test, so on page 5, 1 recipe
         byQuery.limit = 3;
         byQuery.page = 5L;

@@ -27,6 +27,7 @@ public class RecipeSearchByIncludedIngredientsOnlyTest extends RecpsAppTestBase 
         var groupWithRelation = new IngredientGroupWithRelation(chickenGarlicOliveGroup, RecipeSearchRequest.IngredientGroupRelation.OR);
 
         var byQuery = new RecipeSearchRequest();
+        byQuery.ingredientLanguageId = 1L;
         byQuery.includedIngredientGroups = List.of(groupWithRelation);
 
         var response = rest.recipes.search(byQuery);
@@ -48,6 +49,7 @@ public class RecipeSearchByIncludedIngredientsOnlyTest extends RecpsAppTestBase 
         var milkSugarGroup = new IngredientGroupWithRelation(IngredientGroup.of(1, 6L, 8L), RecipeSearchRequest.IngredientGroupRelation.OR);
 
         var byQuery = new RecipeSearchRequest();
+        byQuery.ingredientLanguageId = 1L;
         byQuery.includedIngredientGroups = List.of(tomatoOnionGroup, milkSugarGroup);
 
         var response = rest.recipes.search(byQuery);
@@ -70,6 +72,7 @@ public class RecipeSearchByIncludedIngredientsOnlyTest extends RecpsAppTestBase 
         var flourSourCreamGroup = new IngredientGroupWithRelation(IngredientGroup.of(1, 10L, 12L), RecipeSearchRequest.IngredientGroupRelation.AND);
 
         var byQuery = new RecipeSearchRequest();
+        byQuery.ingredientLanguageId = 1L;
         byQuery.includedIngredientGroups = List.of(chickenEggGroup, flourSourCreamGroup);
 
         var response = rest.recipes.search(byQuery);
@@ -89,6 +92,7 @@ public class RecipeSearchByIncludedIngredientsOnlyTest extends RecpsAppTestBase 
         var garlicGroup = new IngredientGroupWithRelation(IngredientGroup.of(1, 2L), RecipeSearchRequest.IngredientGroupRelation.AND);
 
         var byQuery = new RecipeSearchRequest();
+        byQuery.ingredientLanguageId = 1L;
         byQuery.includedIngredientGroups = List.of(cucumberGroup, garlicGroup);
 
         var response = rest.recipes.search(byQuery);
@@ -106,6 +110,7 @@ public class RecipeSearchByIncludedIngredientsOnlyTest extends RecpsAppTestBase 
         var cucumberGroup = new IngredientGroupWithRelation(IngredientGroup.of(1, 19L), RecipeSearchRequest.IngredientGroupRelation.OR);
 
         var byQuery = new RecipeSearchRequest();
+        byQuery.ingredientLanguageId = 1L;
         byQuery.includedIngredientGroups = List.of(tomatoGroup, cucumberGroup);
 
         var response = rest.recipes.search(byQuery);
@@ -126,6 +131,7 @@ public class RecipeSearchByIncludedIngredientsOnlyTest extends RecpsAppTestBase 
         var eggFlourGroup = new IngredientGroupWithRelation(IngredientGroup.of(2, 7L, 10L), RecipeSearchRequest.IngredientGroupRelation.OR);
 
         var byQuery = new RecipeSearchRequest();
+        byQuery.ingredientLanguageId = 1L;
         byQuery.includedIngredientGroups = List.of(tomatoOnionGarlicGroup, eggFlourGroup);
 
         var response = rest.recipes.search(byQuery);
@@ -144,6 +150,7 @@ public class RecipeSearchByIncludedIngredientsOnlyTest extends RecpsAppTestBase 
         var groupWithRelation = new IngredientGroupWithRelation(emptyGroup, RecipeSearchRequest.IngredientGroupRelation.OR);
 
         var query = new RecipeSearchRequest();
+        query.ingredientLanguageId = 1L;
         query.includedIngredientGroups = List.of(groupWithRelation);
 
         var invalidMatchResponse = given()
@@ -164,6 +171,7 @@ public class RecipeSearchByIncludedIngredientsOnlyTest extends RecpsAppTestBase 
         var groupWithRelation = new IngredientGroupWithRelation(invalidMinMatchGroup, RecipeSearchRequest.IngredientGroupRelation.OR);
 
         var query = new RecipeSearchRequest();
+        query.ingredientLanguageId = 1L;
         query.includedIngredientGroups = List.of(groupWithRelation);
 
         var invalidMatchResponse = given()

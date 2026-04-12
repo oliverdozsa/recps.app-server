@@ -34,11 +34,13 @@ public class RecipesRest {
         Log.debugf("query = %s", query);
         return Uni.combine().all()
                 .unis(repository.searchBy(query), repository.countBy(query))
-                .with(RecipesRest::toResponse);
+                .with((recipeEntities, totalCount) -> toResponse(recipeEntities, totalCount, query.ingredientLanguageId));
     }
 
-    private static PageResponse<RecipeSearchResponse> toResponse(List<RecipeEntity> recipeEntities, Long totalCount) {
-        var recipes = recipeEntities.stream().map(RecipeEntityToSearchResponse::from).toList();
+    private static PageResponse<RecipeSearchResponse> toResponse(List<RecipeEntity> recipeEntities, Long totalCount, Long ingredientLanguageId) {
+        var recipes = recipeEntities.stream()
+                .map(e -> RecipeEntityToSearchResponse.from(e, ingredientLanguageId))
+                .toList();
         return new PageResponse<>(recipes, totalCount);
     }
 }

@@ -13,6 +13,9 @@ public class RecipeSearchRequest {
     public List<Long> excludedIngredients;
     public String filterByName;
 
+    @NotNull
+    public Long ingredientLanguageId;
+
     @Min(1)
     @Max(25)
     public Integer limit = 15;
@@ -26,6 +29,7 @@ public class RecipeSearchRequest {
                 "\"includedIngredientGroups\": " + includedIngredientGroups + ", " +
                 "\"excludedIngredients\": " + excludedIngredients + ", " +
                 "\"filterByName\": " + "\"" + filterByName + "\"" + ", " +
+                "\"ingredientLanguageId\": " + "\"" + ingredientLanguageId + "\"" + ", " +
                 "\"limit\": " + "\"" + limit + "\"" + ", " +
                 "\"page\": " + "\"" + page + "\"" +
                 "}";

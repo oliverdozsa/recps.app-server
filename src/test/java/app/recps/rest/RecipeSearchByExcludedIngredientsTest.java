@@ -19,6 +19,7 @@ public class RecipeSearchByExcludedIngredientsTest extends RecpsAppTestBase {
     @Test
     public void excludedIngredientsOnly() {
         var byQuery = new RecipeSearchRequest();
+        byQuery.ingredientLanguageId = 1L;
 
         // Excluded: chicken breast, garlic, olive oil
         byQuery.excludedIngredients = List.of(1L, 2L, 3L);
@@ -35,6 +36,7 @@ public class RecipeSearchByExcludedIngredientsTest extends RecpsAppTestBase {
     @Test
     public void excludedIngredientRemovesSubsetOfIncludedResults() {
         var byQuery = new RecipeSearchRequest();
+        byQuery.ingredientLanguageId = 1L;
 
         // Included: chicken breast → Garlic Chicken, Fokhagymás csirkemell, Rántott csirkemell
         byQuery.includedIngredientGroups = List.of(
@@ -54,6 +56,7 @@ public class RecipeSearchByExcludedIngredientsTest extends RecpsAppTestBase {
     @Test
     public void excludedIngredientRemovesRecipesFromLargerIncludedSet() {
         var byQuery = new RecipeSearchRequest();
+        byQuery.ingredientLanguageId = 1L;
 
         // Included: onion → 8 recipes
         byQuery.includedIngredientGroups = List.of(
@@ -75,6 +78,7 @@ public class RecipeSearchByExcludedIngredientsTest extends RecpsAppTestBase {
     @Test
     public void includedAndExcludedAreNotDistinctExcludeOverrides() {
         var byQuery = new RecipeSearchRequest();
+        byQuery.ingredientLanguageId = 1L;
 
         // Included: tomato, garlic → 6 garlic recipes + 5 tomato
         byQuery.includedIngredientGroups = List.of(

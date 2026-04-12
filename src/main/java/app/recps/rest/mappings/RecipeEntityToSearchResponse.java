@@ -7,10 +7,10 @@ import app.recps.rest.responses.RecipeSearchResponse;
 import java.util.List;
 
 public class RecipeEntityToSearchResponse {
-    public static RecipeSearchResponse from(RecipeEntity entity) {
+    public static RecipeSearchResponse from(RecipeEntity entity, Long ingredientLanguageId) {
         List<RecipeSearchResponse.Ingredient> ingredients = entity.ingredients == null ? List.of() :
                 entity.ingredients.stream()
-                        .map(RecipeEntityToSearchResponse::toResponseIngredient)
+                        .map(i -> toResponseIngredient(i, ingredientLanguageId))
                         .toList();
 
         return new RecipeSearchResponse(
@@ -24,11 +24,12 @@ public class RecipeEntityToSearchResponse {
         );
     }
 
-    private static RecipeSearchResponse.Ingredient toResponseIngredient(RecipeIngredientEntity entity) {
+    private static RecipeSearchResponse.Ingredient toResponseIngredient(RecipeIngredientEntity entity, Long ingredientLanguageId) {
         return new RecipeSearchResponse.Ingredient(
                 entity.ingredient.id,
                 entity.ingredient.names == null ? List.of() :
                         entity.ingredient.names.stream()
+                                .filter(n -> n.language.id.equals(ingredientLanguageId))
                                 .map(n -> new RecipeSearchResponse.IngredientName(n.name, n.language.isoName))
                                 .toList()
         );

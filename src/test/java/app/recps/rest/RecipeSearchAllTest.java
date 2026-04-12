@@ -13,6 +13,7 @@ public class RecipeSearchAllTest extends RecpsAppTestBase {
     @Test
     public void searchForAllRecipes() {
         var byQuery = new RecipeSearchRequest();
+        byQuery.ingredientLanguageId = 1L;
         var response = rest.recipes.search(byQuery);
 
         assertThat(response.items(), hasSize(lessThan(25)));

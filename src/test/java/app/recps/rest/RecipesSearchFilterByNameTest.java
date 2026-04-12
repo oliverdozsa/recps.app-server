@@ -15,6 +15,7 @@ public class RecipesSearchFilterByNameTest extends RecpsAppTestBase {
     public void filterByName() {
         // Filter by "om" → Tomato & Onion Salad, Tomato Soup, Paradicsomleves, Gombaleves
         var byQuery = new RecipeSearchRequest();
+        byQuery.ingredientLanguageId = 1L;
         byQuery.filterByName = "om";
 
         var response = rest.recipes.search(byQuery);
