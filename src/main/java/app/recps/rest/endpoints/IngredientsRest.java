@@ -3,6 +3,7 @@ package app.recps.rest.endpoints;
 import app.recps.data.entities.IngredientNameEntity;
 import app.recps.data.repositories.IngredientNameRepository;
 import app.recps.rest.requests.IngredientSearchRequest;
+import app.recps.rest.requests.IngredientsByIdsRequest;
 import app.recps.rest.responses.IngredientSearchResponse;
 import io.quarkus.logging.Log;
 import io.smallrye.mutiny.Uni;
@@ -30,6 +31,18 @@ public class IngredientsRest {
         Log.debugf("request = %s", request);
 
         return repository.searchBy(request)
+                .map(entities -> entities.stream().map(IngredientsRest::toResponse).toList());
+    }
+
+    @Path("/byIds")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Uni<List<IngredientSearchResponse>> findByIds(@Valid IngredientsByIdsRequest request) {
+        Log.info("Got request to find ingredients by ids.");
+        Log.debugf("request = %s", request);
+
+        return repository.findByIds(request)
                 .map(entities -> entities.stream().map(IngredientsRest::toResponse).toList());
     }
 

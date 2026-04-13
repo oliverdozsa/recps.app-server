@@ -1,6 +1,7 @@
 package app.recps.testbases;
 
 import app.recps.rest.requests.IngredientSearchRequest;
+import app.recps.rest.requests.IngredientsByIdsRequest;
 import app.recps.rest.responses.IngredientSearchResponse;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
@@ -16,6 +17,16 @@ public class IngredientsRestTestBase {
                 .contentType(ContentType.JSON)
                 .body(request)
                 .when().post("/ingredients/search")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().body().as(new TypeRef<List<IngredientSearchResponse>>() {});
+    }
+
+    public List<IngredientSearchResponse> findByIds(IngredientsByIdsRequest request) {
+        return given()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/ingredients/byIds")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .extract().body().as(new TypeRef<List<IngredientSearchResponse>>() {});
