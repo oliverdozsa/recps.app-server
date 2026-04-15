@@ -28,6 +28,14 @@ class IncludedIngredientsSql {
     }
 
     private static String subQueryFor(RecipeSearchRequest.IngredientGroup ingredientGroup) {
+        if(Boolean.TRUE.equals(ingredientGroup.asPercent())) {
+            return subQueryForMinMatchAsPercent(ingredientGroup);
+        } else {
+            return subQueryForMinMatchAsCount(ingredientGroup);
+        }
+    }
+
+    private static String subQueryForMinMatchAsCount(RecipeSearchRequest.IngredientGroup ingredientGroup) {
         var ingredientIds = ingredientGroup.ids().stream().map(Object::toString)
                 .collect(Collectors.joining(","));
 
@@ -35,5 +43,19 @@ class IncludedIngredientsSql {
                 "WHERE ri.ingredient_id IN (" + ingredientIds + ") " +
                 "GROUP BY ri.recipe_id " +
                 "HAVING COUNT(ri.ingredient_id) >= " + ingredientGroup.minMatch();
+    }
+
+    private static String subQueryForMinMatchAsPercent(RecipeSearchRequest.IngredientGroup ingredientGroup) {
+        var percentNormalized = Math.max(0, ingredientGroup.minMatch());
+        percentNormalized = Math.min(100, percentNormalized);
+
+        var ingredientIds = ingredientGroup.ids().stream().map(Object::toString)
+                .collect(Collectors.joining(","));
+
+        return "SELECT re.id FROM recipe re " +
+                "JOIN recipe_ingredient ri ON re.id = ri.ingredient_id " +
+                "WHERE ri.ingredient_id IN (" + ingredientIds + ") " +
+                "GROUP BY re.id " +
+                "HAVING ((COUNT(ri.ingredient_id) * 1.0) / (re.num_of_ingredient * 1.0)) * 100 >= " + percentNormalized;
     }
 }

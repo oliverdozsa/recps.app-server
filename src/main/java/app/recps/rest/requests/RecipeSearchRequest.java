@@ -42,14 +42,14 @@ public class RecipeSearchRequest {
         }
     }
 
-    public record IngredientGroup(@NotEmpty List<Long> ids, @Min(1) @NotNull Integer minMatch) {
+    public record IngredientGroup(@NotEmpty List<Long> ids, @Min(1) @NotNull Integer minMatch, Boolean asPercent) {
         public static IngredientGroup of(Integer minMatch, Long... id) {
-            return new IngredientGroup(List.of(id), minMatch);
+            return new IngredientGroup(List.of(id), minMatch, false);
         }
 
         @Override
         public String toString() {
-            return "{\"ids\":" + ids + ",\"minMatch\":" + minMatch + "}";
+            return "{\"ids\":" + ids + ",\"minMatch\":" + minMatch + ",\"asPercent\":" + Boolean.TRUE.equals(asPercent) + "}";
         }
     }
 
