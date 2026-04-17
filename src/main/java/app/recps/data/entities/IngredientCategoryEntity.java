@@ -18,7 +18,7 @@ public class IngredientCategoryEntity {
     @ManyToOne
     public UserEntity user;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "categories_ingredients",
             joinColumns = @JoinColumn(name = "category_id"),

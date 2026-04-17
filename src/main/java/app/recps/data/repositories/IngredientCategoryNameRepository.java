@@ -17,18 +17,19 @@ public class IngredientCategoryNameRepository implements PanacheRepository<Ingre
 
         var filterByNameInQuery = "%" + request.filterByName + "%";
 
-        var globalCategoriesQuery = find("lower(name) like ?1 and language.id = ?2 and category.user is null", filterByNameInQuery, request.languageId);
         if (userId == null) {
-            return globalCategoriesQuery.list();
+            return find(
+                    "lower(name) like ?1 and language.id = ?2 and category.user is null",
+                    filterByNameInQuery, request.languageId
+            ).list();
         }
 
-        var userDefineCategoriesQuery = find("lower(name) like ?1 and category.user.id = ?2", filterByNameInQuery, userId);
-        return Uni.combine().all().unis(globalCategoriesQuery.list(), userDefineCategoriesQuery.list())
-                .with(this::addAllTo);
-    }
-
-    private<T> List<T> addAllTo(List<T> target, List<T> from) {
-        target.addAll(from);
-        return target;
+        return find(
+                "lower(name) like ?1 and (" +
+                        "(language.id = ?2 and category.user is null) " +
+                        "or category.user.id = ?3" +
+                        ")",
+                filterByNameInQuery, request.languageId, userId
+        ).list();
     }
 }
