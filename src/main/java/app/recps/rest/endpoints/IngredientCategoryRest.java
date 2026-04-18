@@ -3,6 +3,7 @@ package app.recps.rest.endpoints;
 import app.recps.auth.UserIdentityAugmentor;
 import app.recps.data.entities.IngredientCategoryNameEntity;
 import app.recps.data.repositories.IngredientCategoryNameRepository;
+import app.recps.rest.requests.IngredientCategoryByIdsRequest;
 import app.recps.rest.requests.IngredientCategorySearchRequest;
 import app.recps.rest.responses.IngredientCategorySearchResponse;
 import io.quarkus.hibernate.reactive.panache.common.WithSession;
@@ -38,6 +39,19 @@ public class IngredientCategoryRest {
 
         var userId = currentAppUserId();
         return repository.searchBy(request, userId)
+                .map(this::toResponse);
+    }
+
+    @Path("/byIds")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @WithSession
+    public Uni<List<IngredientCategorySearchResponse>> byIds(@Valid IngredientCategoryByIdsRequest request) {
+        Log.info("Got request to search for ingredient categories by ids.");
+        Log.debugf("request = %s", request);
+
+        return repository.byIds(request)
                 .map(this::toResponse);
     }
 

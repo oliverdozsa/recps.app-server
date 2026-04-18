@@ -1,6 +1,7 @@
 package app.recps.data.repositories;
 
 import app.recps.data.entities.IngredientCategoryNameEntity;
+import app.recps.rest.requests.IngredientCategoryByIdsRequest;
 import app.recps.rest.requests.IngredientCategorySearchRequest;
 import io.quarkus.hibernate.reactive.panache.PanacheRepository;
 import io.quarkus.logging.Log;
@@ -31,5 +32,13 @@ public class IngredientCategoryNameRepository implements PanacheRepository<Ingre
                         ")",
                 filterByNameInQuery, request.languageId, userId
         ).list();
+    }
+
+    public Uni<List<IngredientCategoryNameEntity>> byIds(IngredientCategoryByIdsRequest request) {
+        Log.info("Got request to query DB for ingredient categories.");
+        Log.debugf("request = %s", request);
+
+        return find("where category.id in ?1 and language.id = ?2 and category.user is null", request.ids, request.languageId)
+                .list();
     }
 }
