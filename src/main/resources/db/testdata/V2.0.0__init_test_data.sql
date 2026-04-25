@@ -237,6 +237,40 @@ INSERT INTO recipe_ingredient (id, ingredient_id, recipe_id) VALUES (55, 10, 16)
 INSERT INTO recipe_ingredient (id, ingredient_id, recipe_id) VALUES (56, 17, 16); -- butter
 
 
+-- App users
+INSERT INTO app_user (id, email) VALUES (1, 'alice@recps.app');
+INSERT INTO app_user (id, email) VALUES (2, 'bob@recps.app');
+
+-- Ingredient categories (user_id NULL => global)
+INSERT INTO ingredient_category (id, user_id) VALUES (1, NULL); -- Vegetables / Zöldségek
+INSERT INTO ingredient_category (id, user_id) VALUES (2, NULL); -- Dairy / Tejtermékek
+INSERT INTO ingredient_category (id, user_id) VALUES (3, NULL); -- Meat / Hús
+INSERT INTO ingredient_category (id, user_id) VALUES (4, 1);    -- Alice's "Vegan Snacks"
+INSERT INTO ingredient_category (id, user_id) VALUES (5, 2);    -- Bob's "Grill Favorites"
+
+-- Ingredient category names (multilingual for global; only EN for user-defined ones)
+INSERT INTO ingredient_category_name (id, name, language_id, category_id) VALUES (1, 'Vegetables',      1, 1);
+INSERT INTO ingredient_category_name (id, name, language_id, category_id) VALUES (2, 'Zöldségek',       2, 1);
+INSERT INTO ingredient_category_name (id, name, language_id, category_id) VALUES (3, 'Dairy',           1, 2);
+INSERT INTO ingredient_category_name (id, name, language_id, category_id) VALUES (4, 'Tejtermékek',     2, 2);
+INSERT INTO ingredient_category_name (id, name, language_id, category_id) VALUES (5, 'Meat',            1, 3);
+INSERT INTO ingredient_category_name (id, name, language_id, category_id) VALUES (6, 'Hús',             2, 3);
+INSERT INTO ingredient_category_name (id, name, language_id, category_id) VALUES (7, 'Vegan Snacks',    1, 4);
+INSERT INTO ingredient_category_name (id, name, language_id, category_id) VALUES (8, 'Grill Favorites', 1, 5);
+
+-- Category <-> ingredient links
+INSERT INTO categories_ingredients (category_id, ingredient_id) VALUES (1, 4);  -- veg: tomato
+INSERT INTO categories_ingredients (category_id, ingredient_id) VALUES (1, 5);  -- veg: onion
+INSERT INTO categories_ingredients (category_id, ingredient_id) VALUES (1, 13); -- veg: carrot
+INSERT INTO categories_ingredients (category_id, ingredient_id) VALUES (1, 14); -- veg: bell pepper
+INSERT INTO categories_ingredients (category_id, ingredient_id) VALUES (2, 6);  -- dairy: milk
+INSERT INTO categories_ingredients (category_id, ingredient_id) VALUES (2, 12); -- dairy: sour cream
+INSERT INTO categories_ingredients (category_id, ingredient_id) VALUES (2, 17); -- dairy: butter
+INSERT INTO categories_ingredients (category_id, ingredient_id) VALUES (3, 1);  -- meat: chicken breast
+INSERT INTO categories_ingredients (category_id, ingredient_id) VALUES (4, 4);  -- alice: tomato
+INSERT INTO categories_ingredients (category_id, ingredient_id) VALUES (4, 2);  -- alice: garlic
+INSERT INTO categories_ingredients (category_id, ingredient_id) VALUES (5, 5);  -- bob: onion
+
 SELECT setval('language_id_seq', (SELECT MAX(id) FROM ingredient));
 SELECT setval('source_page_id_seq', (SELECT MAX(id) FROM source_page));
 SELECT setval('ingredient_id_seq', (SELECT MAX(id) FROM ingredient));
@@ -244,3 +278,6 @@ SELECT setval('ingredient_name_id_seq', (SELECT MAX(id) FROM ingredient_name));
 SELECT setval('ingredient_alternative_name_id_seq', (SELECT MAX(id) FROM ingredient_alternative_name));
 SELECT setval('recipe_id_seq', (SELECT MAX(id) FROM recipe));
 SELECT setval('recipe_ingredient_id_seq', (SELECT MAX(id) FROM recipe_ingredient));
+SELECT setval('app_user_id_seq', (SELECT MAX(id) FROM app_user));
+SELECT setval('ingredient_category_id_seq', (SELECT MAX(id) FROM ingredient_category));
+SELECT setval('ingredient_category_name_id_seq', (SELECT MAX(id) FROM ingredient_category_name));

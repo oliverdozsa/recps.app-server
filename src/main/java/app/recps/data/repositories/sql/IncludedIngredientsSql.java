@@ -53,9 +53,9 @@ class IncludedIngredientsSql {
                 .collect(Collectors.joining(","));
 
         return "SELECT re.id FROM recipe re " +
-                "JOIN recipe_ingredient ri ON re.id = ri.ingredient_id " +
+                "JOIN recipe_ingredient ri ON re.id = ri.recipe_id " +
                 "WHERE ri.ingredient_id IN (" + ingredientIds + ") " +
                 "GROUP BY re.id " +
-                "HAVING ((COUNT(ri.ingredient_id) * 1.0) / (re.num_of_ingredient * 1.0)) * 100 >= " + percentNormalized;
+                "HAVING ((COUNT(ri.ingredient_id) * 1.0) / (re.num_of_ingredients * 1.0)) * 100 >= " + percentNormalized;
     }
 }

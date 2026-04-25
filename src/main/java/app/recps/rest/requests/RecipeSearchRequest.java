@@ -36,6 +36,10 @@ public class RecipeSearchRequest {
     }
 
     public record IngredientGroupWithRelation(@Valid IngredientGroup group, IngredientGroupRelation relation) {
+        public IngredientGroupWithRelation {
+            if (relation == null) relation = IngredientGroupRelation.AND;
+        }
+
         @Override
         public String toString() {
             return "{\"group\":" + group + ",\"relation\":\"" + relation + "\"}";
