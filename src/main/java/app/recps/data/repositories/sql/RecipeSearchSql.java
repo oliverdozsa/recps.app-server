@@ -21,8 +21,15 @@ public class RecipeSearchSql {
 
     private String build() {
         return buildBase(false) +
+                orderBy() +
                 " LIMIT " + request.limit +
                 " OFFSET " + request.limit * request.page;
+    }
+
+    private String orderBy() {
+        if (request.orderBy == null) return "";
+        var direction = request.orderDirection != null ? request.orderDirection.name() : "ASC";
+        return " ORDER BY " + request.orderBy.column + " " + direction;
     }
 
     private String buildForCount() {

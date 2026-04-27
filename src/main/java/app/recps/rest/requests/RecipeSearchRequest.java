@@ -1,5 +1,6 @@
 package app.recps.rest.requests;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -23,6 +24,9 @@ public class RecipeSearchRequest {
     @Min(0)
     public Long page = 0L;
 
+    public OrderBy orderBy;
+    public OrderDirection orderDirection;
+
     @Override
     public String toString() {
         return "{" +
@@ -31,7 +35,9 @@ public class RecipeSearchRequest {
                 "\"filterByName\": " + "\"" + filterByName + "\"" + ", " +
                 "\"ingredientLanguageId\": " + "\"" + ingredientLanguageId + "\"" + ", " +
                 "\"limit\": " + "\"" + limit + "\"" + ", " +
-                "\"page\": " + "\"" + page + "\"" +
+                "\"page\": " + "\"" + page + "\"" + ", " +
+                "\"orderBy\": " + "\"" + orderBy + "\"" + ", " +
+                "\"orderDirection\": " + "\"" + orderDirection + "\"" +
                 "}";
     }
 
@@ -71,5 +77,27 @@ public class RecipeSearchRequest {
         public String toString() {
             return this.asString;
         }
+    }
+
+    public enum OrderBy {
+        @JsonProperty("prepTime")
+        PREP_TIME("cooking_time"),
+
+        @JsonProperty("ingredientCount")
+        INGREDIENT_COUNT("num_of_ingredients");
+
+        public final String column;
+
+        OrderBy(String column) {
+            this.column = column;
+        }
+    }
+
+    public enum OrderDirection {
+        @JsonProperty("asc")
+        ASC,
+
+        @JsonProperty("desc")
+        DESC
     }
 }
