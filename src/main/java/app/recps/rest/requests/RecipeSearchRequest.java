@@ -27,6 +27,7 @@ public class RecipeSearchRequest {
     public OrderBy orderBy;
     public OrderDirection orderDirection;
     public PrepTime prepTime;
+    public CountIngredients countIngredients;
 
     @Override
     public String toString() {
@@ -39,8 +40,16 @@ public class RecipeSearchRequest {
                 "\"page\": " + "\"" + page + "\"" + ", " +
                 "\"orderBy\": " + "\"" + orderBy + "\"" + ", " +
                 "\"orderDirection\": " + "\"" + orderDirection + "\"" + ", " +
-                "\"prepTime\": " + prepTime +
+                "\"prepTime\": " + prepTime + "\", " +
+                "\"countIngredients\": " + countIngredients + "\", " +
                 "}";
+    }
+
+    public record CountIngredients(Integer min, Integer max) {
+        @Override
+        public String toString() {
+            return "{\"min\":" + min + ",\"max\":" + max + "}";
+        }
     }
 
     public record PrepTime(Integer min, Integer max) {

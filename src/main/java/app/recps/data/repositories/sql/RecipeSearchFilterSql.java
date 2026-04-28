@@ -40,4 +40,20 @@ class RecipeSearchFilterSql {
 
         return "";
     }
+
+    public String byCountIngredients() {
+        if (request.countIngredients == null) {
+            return "";
+        }
+
+        if (request.countIngredients.min() != null && request.countIngredients.max() != null) {
+            return "r.num_of_ingredients BETWEEN :countIngredientsMin AND :countIngredientsMax";
+        } else if (request.countIngredients.min() != null) {
+            return "r.num_of_ingredients >= :countIngredientsMin";
+        } else if (request.countIngredients.max() != null) {
+            return "r.num_of_ingredients <= :countIngredientsMax";
+        }
+
+        return "";
+    }
 }

@@ -26,11 +26,11 @@ public class RecipeRepository implements PanacheRepository<RecipeEntity> {
 
     private Mutiny.SelectionQuery<RecipeEntity> createQueryWithParametersSet(Mutiny.Session session, RecipeSearchRequest request) {
         var sql = RecipeSearchSql.forSearch(request);
-        Log.debugf("sql = %s", sql);
 
         var query = session.createNativeQuery(sql, RecipeEntity.class);
         setParameterIfExists(query, "filterByName", request.filterByName);
         setPrepTimeParameters(query, request);
+        setCountIngredientsParameters(query, request);
 
         return query;
     }
@@ -40,6 +40,7 @@ public class RecipeRepository implements PanacheRepository<RecipeEntity> {
         var query = session.createNativeQuery(sql, Long.class);
         setParameterIfExists(query, "filterByName", request.filterByName);
         setPrepTimeParameters(query, request);
+        setCountIngredientsParameters(query, request);
 
         return query;
     }
@@ -54,5 +55,11 @@ public class RecipeRepository implements PanacheRepository<RecipeEntity> {
         if (request.prepTime == null) return;
         if (request.prepTime.min() != null) query.setParameter("prepTimeMin", request.prepTime.min());
         if (request.prepTime.max() != null) query.setParameter("prepTimeMax", request.prepTime.max());
+    }
+
+    private <T> void setCountIngredientsParameters(Mutiny.SelectionQuery<T> query, RecipeSearchRequest request) {
+        if (request.countIngredients == null) return;
+        if (request.countIngredients.min() != null) query.setParameter("countIngredientsMin", request.countIngredients.min());
+        if (request.countIngredients.max() != null) query.setParameter("countIngredientsMax", request.countIngredients.max());
     }
 }
