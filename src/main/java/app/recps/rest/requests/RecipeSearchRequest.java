@@ -26,6 +26,7 @@ public class RecipeSearchRequest {
 
     public OrderBy orderBy;
     public OrderDirection orderDirection;
+    public PrepTime prepTime;
 
     @Override
     public String toString() {
@@ -37,8 +38,16 @@ public class RecipeSearchRequest {
                 "\"limit\": " + "\"" + limit + "\"" + ", " +
                 "\"page\": " + "\"" + page + "\"" + ", " +
                 "\"orderBy\": " + "\"" + orderBy + "\"" + ", " +
-                "\"orderDirection\": " + "\"" + orderDirection + "\"" +
+                "\"orderDirection\": " + "\"" + orderDirection + "\"" + ", " +
+                "\"prepTime\": " + prepTime +
                 "}";
+    }
+
+    public record PrepTime(Integer min, Integer max) {
+        @Override
+        public String toString() {
+            return "{\"min\":" + min + ",\"max\":" + max + "}";
+        }
     }
 
     public record IngredientGroupWithRelation(@Valid IngredientGroup group, IngredientGroupRelation relation) {

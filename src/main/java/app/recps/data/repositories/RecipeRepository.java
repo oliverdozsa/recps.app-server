@@ -30,6 +30,7 @@ public class RecipeRepository implements PanacheRepository<RecipeEntity> {
 
         var query = session.createNativeQuery(sql, RecipeEntity.class);
         setParameterIfExists(query, "filterByName", request.filterByName);
+        setPrepTimeParameters(query, request);
 
         return query;
     }
@@ -38,6 +39,7 @@ public class RecipeRepository implements PanacheRepository<RecipeEntity> {
         var sql = RecipeSearchSql.forCount(request);
         var query = session.createNativeQuery(sql, Long.class);
         setParameterIfExists(query, "filterByName", request.filterByName);
+        setPrepTimeParameters(query, request);
 
         return query;
     }
@@ -46,5 +48,11 @@ public class RecipeRepository implements PanacheRepository<RecipeEntity> {
         if(value != null && !value.isEmpty()) {
             query.setParameter(name, "%" + value + "%");
         }
+    }
+
+    private <T> void setPrepTimeParameters(Mutiny.SelectionQuery<T> query, RecipeSearchRequest request) {
+        if (request.prepTime == null) return;
+        if (request.prepTime.min() != null) query.setParameter("prepTimeMin", request.prepTime.min());
+        if (request.prepTime.max() != null) query.setParameter("prepTimeMax", request.prepTime.max());
     }
 }

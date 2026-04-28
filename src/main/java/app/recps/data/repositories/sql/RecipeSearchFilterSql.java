@@ -24,4 +24,20 @@ class RecipeSearchFilterSql {
 
         return "r.name ILIKE :filterByName";
     }
+
+    public String byPrepTime() {
+        if (request.prepTime == null) {
+            return "";
+        }
+
+        if (request.prepTime.min() != null && request.prepTime.max() != null) {
+            return "r.cooking_time BETWEEN :prepTimeMin AND :prepTimeMax";
+        } else if (request.prepTime.min() != null) {
+            return "r.cooking_time >= :prepTimeMin";
+        } else if (request.prepTime.max() != null) {
+            return "r.cooking_time <= :prepTimeMax";
+        }
+
+        return "";
+    }
 }

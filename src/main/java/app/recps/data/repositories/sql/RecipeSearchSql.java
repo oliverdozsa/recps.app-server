@@ -41,11 +41,12 @@ public class RecipeSearchSql {
         return "SELECT " + (isForCount ? "COUNT(" : "") + "*" + (isForCount ? ")" : "") + " from recipe r " + (isAnyFilterUsed() ? "WHERE " : "") +
                 filter.byIncludedIngredients() + ANDBeforeExcluded() +
                 filter.byExcludedIngredients() + ANDBeforeName() +
-                filter.byName();
+                filter.byName() + ANDBeforePrepTime() +
+                filter.byPrepTime();
     }
 
     private boolean isAnyFilterUsed() {
-        return isIncludedIngredientsUsed() || isExcludedIngredientsUsed() || isFilterByNameUsed();
+        return isIncludedIngredientsUsed() || isExcludedIngredientsUsed() || isFilterByNameUsed() || isPrepTimeUsed();
     }
 
     private boolean isIncludedIngredientsUsed() {
@@ -60,6 +61,10 @@ public class RecipeSearchSql {
         return request.filterByName != null && !request.filterByName.isEmpty();
     }
 
+    private boolean isPrepTimeUsed() {
+        return request.prepTime != null && (request.prepTime.min() != null || request.prepTime.max() != null);
+    }
+
     private String ANDBeforeExcluded() {
         return isIncludedIngredientsUsed() && isExcludedIngredientsUsed() ? "AND " : "";
     }
@@ -67,6 +72,11 @@ public class RecipeSearchSql {
     private String ANDBeforeName() {
         return (isIncludedIngredientsUsed() || isExcludedIngredientsUsed())
                 && isFilterByNameUsed() ? "AND " : "";
+    }
+
+    private String ANDBeforePrepTime() {
+        return (isIncludedIngredientsUsed() || isExcludedIngredientsUsed() || isFilterByNameUsed())
+                && isPrepTimeUsed() ? "AND " : "";
     }
 
     private RecipeSearchSql() {
