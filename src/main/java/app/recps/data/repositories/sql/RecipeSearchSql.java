@@ -71,22 +71,22 @@ public class RecipeSearchSql {
     }
 
     private String ANDBeforeExcluded() {
-        return isIncludedIngredientsUsed() && isExcludedIngredientsUsed() ? "AND " : "";
+        return isIncludedIngredientsUsed() && isExcludedIngredientsUsed() ? " AND " : "";
     }
 
     private String ANDBeforeName() {
         return (isIncludedIngredientsUsed() || isExcludedIngredientsUsed())
-                && isFilterByNameUsed() ? "AND " : "";
+                && isFilterByNameUsed() ? " AND " : "";
     }
 
     private String ANDBeforePrepTime() {
         return (isIncludedIngredientsUsed() || isExcludedIngredientsUsed() || isFilterByNameUsed())
-                && isPrepTimeUsed() ? "AND " : "";
+                && isPrepTimeUsed() ? " AND " : "";
     }
 
     private String ANDBeforeCountIngredients() {
         return (isIncludedIngredientsUsed() || isExcludedIngredientsUsed() || isFilterByNameUsed() || isPrepTimeUsed())
-                && isCountIngredientUsed() ? "AND " : "";
+                && isCountIngredientUsed() ? " AND " : "";
     }
 
     private RecipeSearchSql() {

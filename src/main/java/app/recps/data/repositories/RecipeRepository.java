@@ -26,6 +26,7 @@ public class RecipeRepository implements PanacheRepository<RecipeEntity> {
 
     private Mutiny.SelectionQuery<RecipeEntity> createQueryWithParametersSet(Mutiny.Session session, RecipeSearchRequest request) {
         var sql = RecipeSearchSql.forSearch(request);
+        Log.debugf("sql = %s", sql);
 
         var query = session.createNativeQuery(sql, RecipeEntity.class);
         setParameterIfExists(query, "filterByName", request.filterByName);
