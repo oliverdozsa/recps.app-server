@@ -41,6 +41,15 @@ class RecipeSearchFilterSql {
         return "";
     }
 
+    public String bySourcePages() {
+        if (request.sourcePages == null || request.sourcePages.isEmpty()) {
+            return "";
+        }
+
+        var ids = request.sourcePages.stream().map(Object::toString).collect(java.util.stream.Collectors.joining(","));
+        return "r.source_page_id IN (" + ids + ")";
+    }
+
     public String byCountIngredients() {
         if (request.countIngredients == null) {
             return "";
