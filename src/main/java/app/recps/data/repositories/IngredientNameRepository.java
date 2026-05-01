@@ -17,7 +17,9 @@ public class IngredientNameRepository implements PanacheRepository<IngredientNam
         Log.debugf("query = %s", request);
         var query = "%" + request.query.toLowerCase() + "%";
 
-        return find("where lower(name) like ?1 and language.id = ?2", query, request.languageId)
+        return find("select distinct i from IngredientNameEntity i left join i.alternatives alt " +
+                        "where (lower(i.name) like ?1 or lower(alt.name) like ?1) and i.language.id = ?2",
+                        query, request.languageId)
                 .list();
     }
 

@@ -93,4 +93,57 @@ public class IngredientSearchTest extends RecpsAppTestBase {
         assertThat(results.get(0).name(), is("Onion"));
         assertThat(results.get(0).alternatives(), empty());
     }
+
+    @Test
+    public void searchByAlternativeNameReturnsParentIngredient() {
+        // "Fillet" matches alternative "Chicken Fillet", should return "Chicken Breast"
+        var request = new IngredientSearchRequest();
+        request.query = "Fillet";
+        request.languageId = EN;
+
+        var results = rest.ingredients.search(request);
+
+        assertThat(results, hasSize(1));
+        assertThat(results.get(0).name(), is("Chicken Breast"));
+        assertThat(results.get(0).ingredientId(), is(1L));
+    }
+
+    @Test
+    public void searchByAlternativeNameInHungarian() {
+        // "Koktél" matches alternative "Koktélparadicsom", should return "Paradicsom"
+        var request = new IngredientSearchRequest();
+        request.query = "Koktél";
+        request.languageId = HU;
+
+        var results = rest.ingredients.search(request);
+
+        assertThat(results, hasSize(1));
+        assertThat(results.get(0).name(), is("Paradicsom"));
+        assertThat(results.get(0).ingredientId(), is(4L));
+    }
+
+    @Test
+    public void searchMatchingBothPrimaryAndAlternativesReturnsNoDuplicates() {
+        // "chicken" matches primary "Chicken Breast" AND alternatives "Chicken Fillet", "Chicken Cutlet"
+        var request = new IngredientSearchRequest();
+        request.query = "chicken";
+        request.languageId = EN;
+
+        var results = rest.ingredients.search(request);
+
+        assertThat(results, hasSize(1));
+        assertThat(results.get(0).name(), is("Chicken Breast"));
+    }
+
+    @Test
+    public void searchByAlternativeIsLanguageIsolated() {
+        // "Wild Garlic" alternative exists only in EN; searching in HU should return nothing
+        var request = new IngredientSearchRequest();
+        request.query = "Wild";
+        request.languageId = HU;
+
+        var results = rest.ingredients.search(request);
+
+        assertThat(results, empty());
+    }
 }
