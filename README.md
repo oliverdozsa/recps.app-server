@@ -1,5 +1,13 @@
 # recps.app-server
+This is the server side part of <https://recps.app>, an application that aggregates recipes from various sources and makes them searchable.
 
+# Features
+- 🥕 Searching recipes by ingredients, ingredient categories
+- 🤓 Advanced searching by using group of ingredients, and setting the relationship between groups
+- 🎯 Filtering recipes by number of ingredients, preparation time, and source page
+- 🌎 Multilingual support for ingredients
+
+# Project structure
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
