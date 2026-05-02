@@ -27,4 +27,12 @@ public class MenusRestTestBase {
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
+
+    public void delete(Long id, String token) {
+        given()
+                .auth().oauth2(token)
+                .when().delete("/menus/" + id)
+                .then()
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+    }
 }

@@ -48,6 +48,12 @@ public class MenuPlanRepository implements PanacheRepository<MenuPlanEntity> {
                 }));
     }
 
+    public Uni<Void> deleteForUser(Long userId, Long planId) {
+        return find("id = ?1 and user.id = ?2", planId, userId).firstResult()
+                .onItem().ifNull().failWith(NotFoundException::new)
+                .chain(this::delete);
+    }
+
     private List<Uni<Void>> createMenuPersists(MenuPlanEntity menuPlan, CreateUpdateMenuPlanRequest request, Mutiny.Session session) {
         return request.recipeIds().stream()
                 .map(recipeIds -> {

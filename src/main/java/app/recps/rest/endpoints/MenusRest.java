@@ -102,8 +102,14 @@ public class MenusRest {
     @Path("/{id}")
     @DELETE
     @Authenticated
+    @WithTransaction
     public Uni<Response> delete(@PathParam("id") Long id) {
-        // TODO
-        return null;
+        Log.info("Got request to delete menu.");
+        Log.debugf("id = %d", id);
+
+        Long userId = identity.getAttribute(UserIdentityAugmentor.APP_USER_ID_ATTRIBUTE);
+
+        return menuRepository.deleteForUser(userId, id)
+                .map(ignored -> Response.noContent().build());
     }
 }

@@ -18,6 +18,6 @@ public class MenuPlanEntity {
     @Column(name = "name")
     public String name;
 
-    @OneToMany(mappedBy = "menuPlan")
+    @OneToMany(mappedBy = "menuPlan", cascade = CascadeType.REMOVE)
     public List<MenuEntity> menus;
 }
