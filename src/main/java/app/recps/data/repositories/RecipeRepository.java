@@ -20,6 +20,11 @@ public class RecipeRepository implements PanacheRepository<RecipeEntity> {
         return getSession().chain(s -> createQueryWithParametersSet(s, request).getResultList());
     }
 
+    public Uni<List<RecipeEntity>> findByIds(List<Long> ids) {
+        if (ids.isEmpty()) return Uni.createFrom().item(List.of());
+        return list("id in ?1", ids);
+    }
+
     public Uni<Long> countBy(RecipeSearchRequest request) {
         return getSession().chain(s -> createCountQueryWithParametersSet(s, request).getSingleResult());
     }

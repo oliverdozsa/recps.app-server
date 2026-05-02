@@ -6,4 +6,5 @@ public class RestTestBase {
     public LanguagesRestTestBase languages = new LanguagesRestTestBase();
     public IngredientCategoriesRestTestBase ingredientCategories = new IngredientCategoriesRestTestBase();
     public SourcePagesRestTestBase sourcePages = new SourcePagesRestTestBase();
+    public MenusRestTestBase menus = new MenusRestTestBase();
 }
