@@ -17,4 +17,14 @@ public class MenusRestTestBase {
                 .statusCode(Response.Status.CREATED.getStatusCode())
                 .extract().header("Location");
     }
+
+    public void update(Long id, CreateUpdateMenuPlanRequest request, String token) {
+        given()
+                .auth().oauth2(token)
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().put("/menus/" + id)
+                .then()
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+    }
 }

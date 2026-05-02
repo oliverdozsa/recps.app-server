@@ -77,9 +77,26 @@ public class MenusRest {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Authenticated
-    public Uni<Response> update(@PathParam("id") Long id, CreateUpdateMenuPlanRequest request) {
-        // TODO
-        return null;
+    @WithTransaction
+    public Uni<Response> update(@PathParam("id") Long id, @Valid CreateUpdateMenuPlanRequest request) {
+        Log.info("Got request to update menu.");
+        Log.debugf("id = %d, request = %s", id, request);
+
+        Long userId = identity.getAttribute(UserIdentityAugmentor.APP_USER_ID_ATTRIBUTE);
+
+        var allRecipeIds = request.recipeIds().stream()
+                .flatMap(List::stream)
+                .distinct()
+                .toList();
+
+        return recipeRepository.findByIds(allRecipeIds)
+                .chain(found -> {
+                    if (found.size() != allRecipeIds.size()) {
+                        throw new BadRequestException("One or more recipe IDs do not exist.");
+                    }
+                    return menuRepository.updateFrom(userId, id, request);
+                })
+                .map(ignored -> Response.noContent().build());
     }
 
     @Path("/{id}")
