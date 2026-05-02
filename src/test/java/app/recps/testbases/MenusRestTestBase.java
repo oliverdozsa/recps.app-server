@@ -1,8 +1,12 @@
 package app.recps.testbases;
 
 import app.recps.rest.requests.CreateUpdateMenuPlanRequest;
+import app.recps.rest.responses.MenuPlanSimplifiedResponse;
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import jakarta.ws.rs.core.Response;
+
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
@@ -34,5 +38,14 @@ public class MenusRestTestBase {
                 .when().delete("/menus/" + id)
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+    }
+
+    public List<MenuPlanSimplifiedResponse> getAll(String token) {
+        return given()
+                .auth().oauth2(token)
+                .when().get("/menus")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().body().as(new TypeRef<List<MenuPlanSimplifiedResponse>>() {});
     }
 }

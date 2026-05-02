@@ -1,5 +1,5 @@
 package app.recps.rest.responses;
 
-public record MenuPlanSimplifiedResponse() {
+public record MenuPlanSimplifiedResponse(Long id, String name) {
     // TODO
 }

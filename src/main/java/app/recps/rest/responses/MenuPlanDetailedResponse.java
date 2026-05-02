@@ -1,5 +1,6 @@
 package app.recps.rest.responses;
 
-public record MenuPlanDetailedResponse() {
-    // TODO
+import java.util.List;
+
+public record MenuPlanDetailedResponse(Long id, String name, List<List<RecipeSearchResponse>> recipes) {
 }

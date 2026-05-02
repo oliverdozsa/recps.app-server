@@ -1,11 +1,15 @@
 package app.recps.rest.endpoints;
 
 import app.recps.auth.UserIdentityAugmentor;
+import app.recps.data.entities.MenuEntity;
+import app.recps.data.entities.MenuPlanEntity;
 import app.recps.data.repositories.MenuPlanRepository;
 import app.recps.data.repositories.RecipeRepository;
+import app.recps.rest.mappings.RecipeEntityToSearchResponse;
 import app.recps.rest.requests.CreateUpdateMenuPlanRequest;
 import app.recps.rest.responses.MenuPlanDetailedResponse;
 import app.recps.rest.responses.MenuPlanSimplifiedResponse;
+import app.recps.rest.responses.RecipeSearchResponse;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.quarkus.logging.Log;
 import io.quarkus.security.Authenticated;
@@ -37,10 +41,10 @@ public class MenusRest {
     @Authenticated
     @WithTransaction
     public Uni<Response> create(@Valid CreateUpdateMenuPlanRequest request) {
-        Log.info("Got request to create menu.");
-        Log.debugf("request = %s", request);
-
         Long userId = identity.getAttribute(UserIdentityAugmentor.APP_USER_ID_ATTRIBUTE);
+
+        Log.info("Got request to create menu.");
+        Log.debugf("request = %s, userId = %s", request, userId);
 
         var allRecipeIds = request.recipeIds().stream()
                 .flatMap(List::stream)
@@ -59,9 +63,13 @@ public class MenusRest {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Authenticated
-    public Uni<List<MenuPlanSimplifiedResponse>> getAll(@QueryParam("languageId") Long languageId) {
-        // TODO
-        return null;
+    public Uni<List<MenuPlanSimplifiedResponse>> getAll() {
+        Long userId = identity.getAttribute(UserIdentityAugmentor.APP_USER_ID_ATTRIBUTE);
+
+        Log.info("Got request to get all recipes of user.");
+        Log.debugf("userId = %s", userId);
+        return menuRepository.getAllOf(userId)
+                .map(es -> es.stream().map(this::toSimplifiedResponse).toList());
     }
 
     @Path("/{id}")
@@ -79,10 +87,10 @@ public class MenusRest {
     @Authenticated
     @WithTransaction
     public Uni<Response> update(@PathParam("id") Long id, @Valid CreateUpdateMenuPlanRequest request) {
-        Log.info("Got request to update menu.");
-        Log.debugf("id = %d, request = %s", id, request);
-
         Long userId = identity.getAttribute(UserIdentityAugmentor.APP_USER_ID_ATTRIBUTE);
+
+        Log.info("Got request to update menu.");
+        Log.debugf("id = %d, request = %s, userId = %s", id, request, userId);
 
         var allRecipeIds = request.recipeIds().stream()
                 .flatMap(List::stream)
@@ -104,12 +112,30 @@ public class MenusRest {
     @Authenticated
     @WithTransaction
     public Uni<Response> delete(@PathParam("id") Long id) {
-        Log.info("Got request to delete menu.");
-        Log.debugf("id = %d", id);
-
         Long userId = identity.getAttribute(UserIdentityAugmentor.APP_USER_ID_ATTRIBUTE);
+
+        Log.info("Got request to delete menu.");
+        Log.debugf("id = %d, userId = %s", id, userId);
 
         return menuRepository.deleteForUser(userId, id)
                 .map(ignored -> Response.noContent().build());
+    }
+
+    private MenuPlanSimplifiedResponse toSimplifiedResponse(MenuPlanEntity entity) {
+        return new MenuPlanSimplifiedResponse(entity.id, entity.name);
+    }
+
+    private MenuPlanDetailedResponse toDetailedResponse(MenuPlanEntity entity, Long languageId) {
+        var recipes = entity.menus.stream()
+                .map(m -> this.getRecipesOf(m, languageId))
+                .toList();
+
+        return new MenuPlanDetailedResponse(entity.id, entity.name, recipes);
+    }
+
+    private List<RecipeSearchResponse> getRecipesOf(MenuEntity entity, Long languageId) {
+        return entity.recipes.stream()
+                .map(r -> RecipeEntityToSearchResponse.from(r, languageId))
+                .toList();
     }
 }
