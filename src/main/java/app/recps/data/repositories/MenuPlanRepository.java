@@ -59,6 +59,13 @@ public class MenuPlanRepository implements PanacheRepository<MenuPlanEntity> {
                 .list();
     }
 
+    public Uni<MenuPlanEntity> byId(Long userId, Long id) {
+        return find("user.id = ?1 and id = ?2", userId, id)
+                .firstResult()
+                .onItem().ifNull().failWith(NotFoundException::new)
+                .call(e -> Mutiny.fetch(e.menus));
+    }
+
     private List<Uni<Void>> createMenuPersists(MenuPlanEntity menuPlan, CreateUpdateMenuPlanRequest request, Mutiny.Session session) {
         return request.recipeIds().stream()
                 .map(recipeIds -> {

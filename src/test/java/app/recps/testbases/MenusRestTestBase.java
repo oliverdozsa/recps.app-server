@@ -1,6 +1,7 @@
 package app.recps.testbases;
 
 import app.recps.rest.requests.CreateUpdateMenuPlanRequest;
+import app.recps.rest.responses.MenuPlanDetailedResponse;
 import app.recps.rest.responses.MenuPlanSimplifiedResponse;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
@@ -11,6 +12,25 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 
 public class MenusRestTestBase {
+    public MenuPlanDetailedResponse byId(Long id, String token) {
+        return given()
+                .auth().oauth2(token)
+                .when().get("/menus/" + id)
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().body().as(MenuPlanDetailedResponse.class);
+    }
+
+    public MenuPlanDetailedResponse byId(Long id, Long languageId, String token) {
+        return given()
+                .auth().oauth2(token)
+                .queryParam("languageId", languageId)
+                .when().get("/menus/" + id)
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().body().as(MenuPlanDetailedResponse.class);
+    }
+
     public String create(CreateUpdateMenuPlanRequest request, String token) {
         return given()
                 .auth().oauth2(token)

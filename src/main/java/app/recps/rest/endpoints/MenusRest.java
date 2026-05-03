@@ -76,9 +76,14 @@ public class MenusRest {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Authenticated
-    public Uni<MenuPlanDetailedResponse> byId(@PathParam("id") Long id) {
-        // TODO
-        return null;
+    public Uni<MenuPlanDetailedResponse> byId(@PathParam("id") Long id, @QueryParam("languageId") Long languageId) {
+        Long userId = identity.getAttribute(UserIdentityAugmentor.APP_USER_ID_ATTRIBUTE);
+
+        Log.info("Got request to get menu by id of user.");
+        Log.debugf("id = %s, userId = %s", id, userId);
+
+        return menuRepository.byId(userId, id)
+                .map(e -> toDetailedResponse(e, languageId));
     }
 
     @Path("/{id}")
