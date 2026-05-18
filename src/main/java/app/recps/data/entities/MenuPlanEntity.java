@@ -2,6 +2,7 @@ package app.recps.data.entities;
 
 import jakarta.persistence.*;
 
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -17,6 +18,9 @@ public class MenuPlanEntity {
 
     @Column(name = "name")
     public String name;
+
+    @Column(name = "updated_at")
+    public Instant updatedAt;
 
     @OneToMany(mappedBy = "menuPlan", cascade = CascadeType.REMOVE)
     public List<MenuEntity> menus;

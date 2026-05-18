@@ -11,6 +11,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.NotFoundException;
 import org.hibernate.reactive.mutiny.Mutiny;
 
+import java.time.Instant;
 import java.util.List;
 
 @ApplicationScoped
@@ -22,6 +23,7 @@ public class MenuPlanRepository implements PanacheRepository<MenuPlanEntity> {
             var menuPlan = new MenuPlanEntity();
             menuPlan.user = userRef;
             menuPlan.name = request.name();
+            menuPlan.updatedAt = Instant.now();
 
             return session.persist(menuPlan).chain(() -> {
                 var menuPersists = createMenuPersists(menuPlan, request, session);
@@ -36,6 +38,7 @@ public class MenuPlanRepository implements PanacheRepository<MenuPlanEntity> {
                 .onItem().ifNull().failWith(NotFoundException::new)
                 .chain(menuPlan -> getSession().chain(session -> {
                     menuPlan.name = request.name();
+                    menuPlan.updatedAt = Instant.now();
 
                     return session.createMutationQuery("delete from MenuEntity m where m.menuPlan.id = ?1")
                             .setParameter(1, planId)
@@ -55,7 +58,7 @@ public class MenuPlanRepository implements PanacheRepository<MenuPlanEntity> {
     }
 
     public Uni<List<MenuPlanEntity>> getAllOf(Long userId) {
-        return find("user.id = ?1", userId)
+        return find("user.id = ?1 order by updatedAt desc", userId)
                 .list();
     }
 
