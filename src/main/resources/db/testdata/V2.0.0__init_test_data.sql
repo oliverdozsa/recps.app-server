@@ -271,6 +271,23 @@ INSERT INTO categories_ingredients (category_id, ingredient_id) VALUES (4, 4);  
 INSERT INTO categories_ingredients (category_id, ingredient_id) VALUES (4, 2);  -- alice: garlic
 INSERT INTO categories_ingredients (category_id, ingredient_id) VALUES (5, 5);  -- bob: onion
 
+-- Menu plans
+INSERT INTO menu_plan (id, user_id, name) VALUES (1, 1, 'Alice Weekly Plan'); -- owned by alice
+INSERT INTO menu_plan (id, user_id, name) VALUES (2, 2, 'Bob Weekly Plan');   -- owned by bob
+
+-- Menus for Alice's plan (2 menus)
+INSERT INTO menu (id, menu_plan_id) VALUES (1, 1);
+INSERT INTO menu (id, menu_plan_id) VALUES (2, 1);
+
+INSERT INTO menus_recipes (menu_id, recipe_id) VALUES (1, 1); -- menu 1: Garlic Chicken
+INSERT INTO menus_recipes (menu_id, recipe_id) VALUES (1, 2); -- menu 1: Tomato & Onion Salad
+INSERT INTO menus_recipes (menu_id, recipe_id) VALUES (2, 3); -- menu 2: Fokhagymás csirkemell
+
+-- Menus for Bob's plan (1 menu)
+INSERT INTO menu (id, menu_plan_id) VALUES (3, 2);
+
+INSERT INTO menus_recipes (menu_id, recipe_id) VALUES (3, 4); -- menu 3: Custard
+
 SELECT setval('language_id_seq', (SELECT MAX(id) FROM ingredient));
 SELECT setval('source_page_id_seq', (SELECT MAX(id) FROM source_page));
 SELECT setval('ingredient_id_seq', (SELECT MAX(id) FROM ingredient));
@@ -281,3 +298,5 @@ SELECT setval('recipe_ingredient_id_seq', (SELECT MAX(id) FROM recipe_ingredient
 SELECT setval('app_user_id_seq', (SELECT MAX(id) FROM app_user));
 SELECT setval('ingredient_category_id_seq', (SELECT MAX(id) FROM ingredient_category));
 SELECT setval('ingredient_category_name_id_seq', (SELECT MAX(id) FROM ingredient_category_name));
+SELECT setval('menu_plan_id_seq', (SELECT MAX(id) FROM menu_plan));
+SELECT setval('menu_id_seq', (SELECT MAX(id) FROM menu));
