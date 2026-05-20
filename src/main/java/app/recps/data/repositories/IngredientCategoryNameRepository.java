@@ -16,7 +16,7 @@ public class IngredientCategoryNameRepository implements PanacheRepository<Ingre
         Log.info("Got request to query DB for ingredient categories.");
         Log.debugf("request = %s, userId = %s", request, userId);
 
-        var filterByNameInQuery = "%" + request.filterByName + "%";
+        var filterByNameInQuery = "%" + request.filterByName.toLowerCase() + "%";
 
         if (userId == null) {
             return find(
