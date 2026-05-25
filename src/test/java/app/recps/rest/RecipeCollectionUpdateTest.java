@@ -23,9 +23,14 @@ public class RecipeCollectionUpdateTest extends RecpsAppTestBase {
     @Test
     public void updateSuccessfully() {
         var token = loginAs("alice");
+
+        var location = rest.collections.create(
+                new CreateRecipeCollectionRequest("To Update", List.of(1L, 2L)), token);
+        var id = extractId(location);
+
         var request = new UpdateRecipeCollectionRequest("Updated Favorites", List.of(5L, 6L));
 
-        rest.collections.update(ALICE_COLLECTION_ID, request, token);
+        rest.collections.update(id, request, token);
     }
 
     @Test

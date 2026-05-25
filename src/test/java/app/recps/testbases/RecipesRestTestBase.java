@@ -19,4 +19,15 @@ public class RecipesRestTestBase {
                 .statusCode(Response.Status.OK.getStatusCode())
                 .extract().body().as(new TypeRef<PageResponse<RecipeSearchResponse>>() {});
     }
+
+    public PageResponse<RecipeSearchResponse> search(RecipeSearchRequest query, String token) {
+        return given()
+                .auth().oauth2(token)
+                .contentType(ContentType.JSON)
+                .body(query)
+                .when().post("/recipes/search")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().body().as(new TypeRef<PageResponse<RecipeSearchResponse>>() {});
+    }
 }

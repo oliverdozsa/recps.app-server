@@ -13,11 +13,11 @@ import java.util.List;
 
 @ApplicationScoped
 public class RecipeRepository implements PanacheRepository<RecipeEntity> {
-    public Uni<List<RecipeEntity>> searchBy(RecipeSearchRequest request) {
+    public Uni<List<RecipeEntity>> searchBy(RecipeSearchRequest request, Long userId) {
         Log.info("Got request to query DB for recipes.");
         Log.debugf("query = %s", request);
 
-        return getSession().chain(s -> createQueryWithParametersSet(s, request).getResultList());
+        return getSession().chain(s -> createQueryWithParametersSet(s, request, userId).getResultList());
     }
 
     public Uni<List<RecipeEntity>> findByIds(List<Long> ids) {
@@ -25,12 +25,12 @@ public class RecipeRepository implements PanacheRepository<RecipeEntity> {
         return list("id in ?1", ids);
     }
 
-    public Uni<Long> countBy(RecipeSearchRequest request) {
-        return getSession().chain(s -> createCountQueryWithParametersSet(s, request).getSingleResult());
+    public Uni<Long> countBy(RecipeSearchRequest request, Long userId) {
+        return getSession().chain(s -> createCountQueryWithParametersSet(s, request, userId).getSingleResult());
     }
 
-    private Mutiny.SelectionQuery<RecipeEntity> createQueryWithParametersSet(Mutiny.Session session, RecipeSearchRequest request) {
-        var sql = RecipeSearchSql.forSearch(request);
+    private Mutiny.SelectionQuery<RecipeEntity> createQueryWithParametersSet(Mutiny.Session session, RecipeSearchRequest request, Long userId) {
+        var sql = RecipeSearchSql.forSearch(request, userId);
         Log.debugf("sql = %s", sql);
 
         var query = session.createNativeQuery(sql, RecipeEntity.class);
@@ -41,8 +41,8 @@ public class RecipeRepository implements PanacheRepository<RecipeEntity> {
         return query;
     }
 
-    private Mutiny.SelectionQuery<Long> createCountQueryWithParametersSet(Mutiny.Session session, RecipeSearchRequest request) {
-        var sql = RecipeSearchSql.forCount(request);
+    private Mutiny.SelectionQuery<Long> createCountQueryWithParametersSet(Mutiny.Session session, RecipeSearchRequest request, Long userId) {
+        var sql = RecipeSearchSql.forCount(request, userId);
         var query = session.createNativeQuery(sql, Long.class);
         setParameterIfExists(query, "filterByName", request.filterByName);
         setPrepTimeParameters(query, request);

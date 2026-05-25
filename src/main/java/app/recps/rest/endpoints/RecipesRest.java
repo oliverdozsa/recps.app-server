@@ -1,5 +1,6 @@
 package app.recps.rest.endpoints;
 
+import app.recps.auth.UserIdentityAugmentor;
 import app.recps.data.entities.RecipeEntity;
 import app.recps.data.entities.SourcePageEntity;
 import app.recps.data.repositories.RecipeRepository;
@@ -11,6 +12,7 @@ import app.recps.rest.responses.RecipeSearchResponse;
 import app.recps.rest.responses.SourcePageResponse;
 import io.quarkus.hibernate.reactive.panache.common.WithSession;
 import io.quarkus.logging.Log;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -27,6 +29,9 @@ public class RecipesRest {
     @Inject
     public SourcePageRepository sourcePageRepository;
 
+    @Inject
+    public SecurityIdentity identity;
+
     @Path("/search")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -35,8 +40,17 @@ public class RecipesRest {
     public Uni<PageResponse<RecipeSearchResponse>> searchBy(@Valid RecipeSearchRequest query) {
         Log.info("Got request to search for recipes.");
         Log.debugf("query = %s", query);
+
+        Long userId = null;
+        if (query.collections != null && !query.collections.isEmpty()) {
+            if (identity.isAnonymous()) {
+                throw new NotAuthorizedException("Authentication is required when filtering by collections.");
+            }
+            userId = identity.getAttribute(UserIdentityAugmentor.APP_USER_ID_ATTRIBUTE);
+        }
+
         return Uni.combine().all()
-                .unis(repository.searchBy(query), repository.countBy(query))
+                .unis(repository.searchBy(query, userId), repository.countBy(query, userId))
                 .with((recipeEntities, totalCount) -> toResponse(recipeEntities, totalCount, query.ingredientLanguageId));
     }
 

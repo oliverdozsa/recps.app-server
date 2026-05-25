@@ -21,26 +21,37 @@ public class MenuUpdateTest extends RecpsAppTestBase {
     @Test
     public void updateSuccessfully() {
         var token = loginAs("alice");
+
+        // Create a new menu for the test
+        var location = rest.menus.create(new CreateUpdateMenuPlanRequest("Plan 0", List.of(List.of(3L))), token);
+        var parts = location.split("/");
+        var id = Long.parseLong(parts[parts.length - 1]);
+
         var request = new CreateUpdateMenuPlanRequest("Updated Plan", List.of(
                 List.of(5L, 6L),
                 List.of(7L)
         ));
 
-        rest.menus.update(ALICE_PLAN_ID, request, token);
+        rest.menus.update(id, request, token);
     }
 
     @Test
     public void updateReplacesOldMenus() {
         var token = loginAs("alice");
 
+        // Create a new menu for the test
+        var location = rest.menus.create(new CreateUpdateMenuPlanRequest("Plan 0", List.of(List.of(3L))), token);
+        var parts = location.split("/");
+        var id = Long.parseLong(parts[parts.length - 1]);
+
         // First update: set 3 menus
-        rest.menus.update(ALICE_PLAN_ID, new CreateUpdateMenuPlanRequest("Plan A", List.of(
+        rest.menus.update(id, new CreateUpdateMenuPlanRequest("Plan A", List.of(
                 List.of(1L), List.of(2L), List.of(3L)
         )), token);
 
         // Second update: replace with completely different menus — would fail with a
         // constraint violation if old menus were not deleted first
-        rest.menus.update(ALICE_PLAN_ID, new CreateUpdateMenuPlanRequest("Plan B", List.of(
+        rest.menus.update(id, new CreateUpdateMenuPlanRequest("Plan B", List.of(
                 List.of(4L, 5L)
         )), token);
     }

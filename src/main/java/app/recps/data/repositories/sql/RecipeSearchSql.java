@@ -4,17 +4,20 @@ import app.recps.rest.requests.RecipeSearchRequest;
 
 public class RecipeSearchSql {
     private RecipeSearchRequest request;
+    private Long userId;
 
-    public static String forSearch(RecipeSearchRequest request) {
+    public static String forSearch(RecipeSearchRequest request, Long userId) {
         var instance = new RecipeSearchSql();
         instance.request = request;
+        instance.userId = userId;
 
         return instance.build();
     }
 
-    public static String forCount(RecipeSearchRequest request) {
+    public static String forCount(RecipeSearchRequest request, Long userId) {
         var instance = new RecipeSearchSql();
         instance.request = request;
+        instance.userId = userId;
 
         return instance.buildForCount();
     }
@@ -44,11 +47,12 @@ public class RecipeSearchSql {
                 filter.byName() + ANDBeforePrepTime() +
                 filter.byPrepTime() + ANDBeforeCountIngredients() +
                 filter.byCountIngredients() + ANDBeforeSourcePages() +
-                filter.bySourcePages();
+                filter.bySourcePages() + ANDBeforeCollections() +
+                filter.byCollections(userId);
     }
 
     private boolean isAnyFilterUsed() {
-        return isIncludedIngredientsUsed() || isExcludedIngredientsUsed() || isFilterByNameUsed() || isPrepTimeUsed() || isCountIngredientUsed() || isSourcePagesUsed();
+        return isIncludedIngredientsUsed() || isExcludedIngredientsUsed() || isFilterByNameUsed() || isPrepTimeUsed() || isCountIngredientUsed() || isSourcePagesUsed() || isCollectionsUsed();
     }
 
     private boolean isIncludedIngredientsUsed() {
@@ -75,6 +79,10 @@ public class RecipeSearchSql {
         return request.sourcePages != null && !request.sourcePages.isEmpty();
     }
 
+    private boolean isCollectionsUsed() {
+        return request.collections != null && !request.collections.isEmpty();
+    }
+
     private String ANDBeforeExcluded() {
         return isIncludedIngredientsUsed() && isExcludedIngredientsUsed() ? " AND " : "";
     }
@@ -97,6 +105,11 @@ public class RecipeSearchSql {
     private String ANDBeforeSourcePages() {
         return (isIncludedIngredientsUsed() || isExcludedIngredientsUsed() || isFilterByNameUsed() || isPrepTimeUsed() || isCountIngredientUsed())
                 && isSourcePagesUsed() ? " AND " : "";
+    }
+
+    private String ANDBeforeCollections() {
+        return (isIncludedIngredientsUsed() || isExcludedIngredientsUsed() || isFilterByNameUsed() || isPrepTimeUsed() || isCountIngredientUsed() || isSourcePagesUsed())
+                && isCollectionsUsed() ? " AND " : "";
     }
 
     private RecipeSearchSql() {

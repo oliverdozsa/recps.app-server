@@ -29,6 +29,7 @@ public class RecipeSearchRequest {
     public PrepTime prepTime;
     public CountIngredients countIngredients;
     public List<Long> sourcePages;
+    public List<Long> collections;
 
     @Override
     public String toString() {
@@ -42,8 +43,9 @@ public class RecipeSearchRequest {
                 "\"orderBy\": " + "\"" + orderBy + "\"" + ", " +
                 "\"orderDirection\": " + "\"" + orderDirection + "\"" + ", " +
                 "\"prepTime\": " + prepTime + "\", " +
-                "\"countIngredients\": " + countIngredients + "\", " +
-                "\"sourcePages\": " + sourcePages +
+                "\"countIngredients\": " + countIngredients + ", " +
+                "\"sourcePages\": " + sourcePages + "," +
+                "\"collections\":" + collections +
                 "}";
     }
 

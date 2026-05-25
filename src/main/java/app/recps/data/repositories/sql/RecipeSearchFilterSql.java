@@ -65,4 +65,21 @@ class RecipeSearchFilterSql {
 
         return "";
     }
+
+    public String byCollections(Long userId) {
+        if (request.collections == null || request.collections.isEmpty()) {
+            return "";
+        }
+
+        var ids = request.collections.stream()
+                .map(Object::toString)
+                .collect(java.util.stream.Collectors.joining(","));
+
+        return "r.id IN (" +
+                "SELECT cr.recipe_id FROM collections_recipes cr " +
+                "JOIN recipe_collection rc ON cr.collection_id = rc.id " +
+                "WHERE rc.id IN (" + ids + ") " +
+                "AND (rc.user_id = " + userId + ")" +
+                ")";
+    }
 }
