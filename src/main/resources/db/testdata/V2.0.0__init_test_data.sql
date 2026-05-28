@@ -288,6 +288,14 @@ INSERT INTO menu (id, menu_plan_id) VALUES (3, 2);
 
 INSERT INTO menus_recipes (menu_id, recipe_id) VALUES (3, 4); -- menu 3: Custard
 
+-- Recipe collections
+INSERT INTO recipe_collection (id, user_id, name, updated_at) VALUES (1, 1, 'Alice Favorites', '2024-01-02 00:00:00+00'); -- owned by alice
+INSERT INTO recipe_collection (id, user_id, name, updated_at) VALUES (2, 2, 'Bob Picks',       '2024-01-01 00:00:00+00'); -- owned by bob
+
+INSERT INTO collections_recipes (collection_id, recipe_id) VALUES (1, 1); -- Alice Favorites: Garlic Chicken
+INSERT INTO collections_recipes (collection_id, recipe_id) VALUES (1, 2); -- Alice Favorites: Tomato & Onion Salad
+INSERT INTO collections_recipes (collection_id, recipe_id) VALUES (2, 4); -- Bob Picks: Custard
+
 SELECT setval('language_id_seq', (SELECT MAX(id) FROM ingredient));
 SELECT setval('source_page_id_seq', (SELECT MAX(id) FROM source_page));
 SELECT setval('ingredient_id_seq', (SELECT MAX(id) FROM ingredient));
@@ -300,3 +308,4 @@ SELECT setval('ingredient_category_id_seq', (SELECT MAX(id) FROM ingredient_cate
 SELECT setval('ingredient_category_name_id_seq', (SELECT MAX(id) FROM ingredient_category_name));
 SELECT setval('menu_plan_id_seq', (SELECT MAX(id) FROM menu_plan));
 SELECT setval('menu_id_seq', (SELECT MAX(id) FROM menu));
+SELECT setval('recipe_collection_id_seq', (SELECT MAX(id) FROM recipe_collection));
