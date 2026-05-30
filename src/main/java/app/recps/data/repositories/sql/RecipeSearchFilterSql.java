@@ -22,7 +22,7 @@ class RecipeSearchFilterSql {
             return "";
         }
 
-        return "r.name ILIKE :filterByName";
+        return "(r.name <-> :filterByName < 0.55 OR r.name ILIKE :filterByName)";
     }
 
     public String byPrepTime() {
