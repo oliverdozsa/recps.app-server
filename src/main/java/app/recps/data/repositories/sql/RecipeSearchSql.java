@@ -2,6 +2,10 @@ package app.recps.data.repositories.sql;
 
 import app.recps.rest.requests.RecipeSearchRequest;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
+
 public class RecipeSearchSql {
     private RecipeSearchRequest request;
     private Long userId;
@@ -30,7 +34,14 @@ public class RecipeSearchSql {
     }
 
     private String orderBy() {
-        if (request.orderBy == null) return "";
+        if (request.orderBy == null) {
+            var now = LocalDate.now();
+            var weekOfYear = now.get(ChronoField.ALIGNED_WEEK_OF_YEAR);
+            var year = now.getYear();
+            var orderByRandomSeed = year + "" + weekOfYear;
+            return " ORDER BY hashtext(id::text || '" + orderByRandomSeed + "')";
+        }
+        ;
         var direction = request.orderDirection != null ? request.orderDirection.name() : "ASC";
         return " ORDER BY " + request.orderBy.column + " " + direction;
     }
